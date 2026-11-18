@@ -48,7 +48,7 @@
             width: 100%;
             top: 3vh;
             text-align: center;
-            color: #6868AC;
+            color: black;
             font-size: 13vh;
             font-weight: 700;
         }
@@ -74,6 +74,8 @@
             flex: 2;
             display: -webkit-flex;
             display: flex;
+            -webkit-flex-direction: column;
+            flex-direction: column;
             -webkit-justify-content: center;
             justify-content: center;
             -webkit-align-items: center;
@@ -81,15 +83,75 @@
             padding-left: 2vh;
         }
 
+        .aqi-row {
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+        }
+
+        .aqi-scale {
+            position: relative;
+            width: 80vh;
+            margin-top: 2vh;
+            padding-bottom: 3.5vh;
+        }
+
+        .scale-bar {
+            display: -webkit-flex;
+            display: flex;
+            height: 1.8vh;
+        }
+
+        .scale-seg {
+            -webkit-flex: 1;
+            flex: 1;
+            margin-left: 0.6vh;
+        }
+
+        .scale-seg:first-child {
+            margin-left: 0;
+            border-radius: 1vh 0 0 1vh;
+        }
+
+        .scale-seg:last-child {
+            border-radius: 0 1vh 1vh 0;
+        }
+
+        .scale-tick {
+            position: absolute;
+            top: 3vh;
+            font-size: 2.2vh;
+            line-height: 1;
+            color: #7a8a92;
+            -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+        }
+
+        .scale-marker {
+            position: absolute;
+            top: -0.9vh;
+            width: 0.9vh;
+            height: 3.6vh;
+            margin-left: -0.45vh;
+            border-radius: 0.45vh;
+            background: #17394a;
+            border: 0.25vh solid white;
+            -webkit-box-sizing: content-box;
+            box-sizing: content-box;
+            left: 0;
+            transition: left 0.8s ease-in-out;
+        }
+
         #status-icon {
-            width: 24vh;
-            height: 24vh;
+            width: 19vh;
+            height: 19vh;
             margin-right: 5vh;
             -webkit-animation: floating 1.5s ease-in-out infinite;
         }
 
         #aqi-value {
-            font-size: 30vh;
+            font-size: 24vh;
             font-weight: 700;
             color: #95a5a6;
             line-height: 1;
@@ -186,11 +248,14 @@
 
         <div class="main-card">
             <div class="aqi-section">
-                <div id="status-icon"></div>
-                <div>
-                    <div id="aqi-value">--</div>
-                    <div class="aqi-label">AQI</div>
+                <div class="aqi-row">
+                    <div id="status-icon"></div>
+                    <div>
+                        <div id="aqi-value">--</div>
+                        <div class="aqi-label">AQI</div>
+                    </div>
                 </div>
+                <div class="aqi-scale" id="aqi-scale"></div>
             </div>
 
             <div id="mid-line" class="divider"></div>
@@ -268,25 +333,54 @@
             return "#E00000";               // ร้อนจัด
         }
 
+        // ชุดสี AQI 6 ระดับ สำหรับจอ Signage (max = ขอบบนของระดับ, ใช้เป็นตัวเลขบนแถบสเกลด้วย)
+        var AQI_LEVELS = [
+            { max: 50,  color: "#20C982", text: "อากาศดี", type: 'happy', textOnColor: "white" },
+            { max: 100, color: "#F5C842", text: "อากาศปานกลาง", type: 'happy', textOnColor: "black" },
+            { max: 150, color: "#F08B3E", text: "เริ่มมีผลต่อกลุ่มเสี่ยง", type: 'sad', textOnColor: "white" },
+            { max: 200, color: "#EE4D5A", text: "มีผลต่อสุขภาพ", type: 'sad', textOnColor: "white" },
+            { max: 300, color: "#9561D1", text: "มีผลต่อสุขภาพอย่างมาก", type: 'sad', textOnColor: "white" },
+            { max: 500, color: "#8F3D58", text: "อันตราย", type: 'sad', textOnColor: "white" }
+        ];
+
+        function getAqiLevelIndex(aqi) {
+            for (var i = 0; i < AQI_LEVELS.length - 1; i++) {
+                if (aqi <= AQI_LEVELS[i].max) return i;
+            }
+            return AQI_LEVELS.length - 1;
+        }
+
+        // แถบสเกลทุกช่วงกว้างเท่ากัน ตำแหน่งตัวชี้คิดแบบเส้นตรงภายในแต่ละช่วง
+        function buildAqiScale() {
+            var scale = document.getElementById('aqi-scale');
+            var n = AQI_LEVELS.length;
+            var html = '<div class="scale-bar">';
+            for (var i = 0; i < n; i++) {
+                html += '<div class="scale-seg" style="background:' + AQI_LEVELS[i].color + '"></div>';
+            }
+            html += '</div>';
+            for (var j = 0; j <= n; j++) {
+                var label = (j === 0) ? 0 : AQI_LEVELS[j - 1].max;
+                var align = (j === 0) ? 'transform:none;' : (j === n) ? 'transform:translateX(-100%);' : '';
+                html += '<div class="scale-tick" style="left:' + (j / n * 100) + '%;' + align + '">' + label + '</div>';
+            }
+            html += '<div class="scale-marker" id="scale-marker"></div>';
+            scale.innerHTML = html;
+        }
+
+        function updateAqiMarker(aqi) {
+            var i = getAqiLevelIndex(aqi);
+            var lo = i === 0 ? 0 : AQI_LEVELS[i - 1].max;
+            var frac = Math.min(Math.max((aqi - lo) / (AQI_LEVELS[i].max - lo), 0), 1);
+            document.getElementById('scale-marker').style.left = ((i + frac) / AQI_LEVELS.length * 100) + '%';
+        }
+
         function renderUI(aqi, temp, ts) {
             if (isNaN(aqi)) return;
             showUpdateTime(ts);
-            var color, text, type, textOnColor = "white";
-
-            // ปรับเป็นชุดสี Vivid (สดยิ่งขึ้น) สำหรับจอ Signage
-            if (aqi <= 50) {
-                color = "#00E400"; text = "อากาศดี"; type = 'happy';
-            } else if (aqi <= 100) {
-                color = "#FFFF00"; text = "อากาศปานกลาง"; type = 'happy'; textOnColor = "black";
-            } else if (aqi <= 150) {
-                color = "#FF8C00"; text = "เริ่มมีผลต่อกลุ่มเสี่ยง"; type = 'sad';
-            } else if (aqi <= 200) {
-                color = "#FF0000"; text = "มีผลต่อสุขภาพ"; type = 'sad';
-            } else if (aqi <= 300) {
-                color = "#9932CC"; text = "มีผลต่อสุขภาพอย่างมาก"; type = 'sad';
-            } else {
-                color = "#800000"; text = "อันตราย"; type = 'sad';
-            }
+            var level = AQI_LEVELS[getAqiLevelIndex(aqi)];
+            var color = level.color, text = level.text, type = level.type, textOnColor = level.textOnColor;
+            updateAqiMarker(aqi);
 
             // อัปเดต UI
             const aqiVal = document.getElementById('aqi-value');
@@ -296,7 +390,7 @@
 
             aqiVal.innerText = aqi;
             // สำหรับสีเหลืองปรับสีตัวหนังสือให้เข้มเพื่อ Contrast
-            aqiVal.style.color = (color === "#FFFF00") ? "#B8860B" : color;
+            aqiVal.style.color = (color === "#F5C842") ? "#B8860B" : color;
             tempVal.innerText = isNaN(temp) ? "--°C" : temp.toFixed(1) + "°C";
             var tempColor = getTempColor(temp);
             tempVal.style.color = tempColor;
@@ -308,7 +402,7 @@
 
             document.getElementById('status-icon').innerHTML = getAqiIcon(color, type);
             document.getElementById('weather-icon-box').innerHTML = getThermometerIcon(tempColor);
-            if (labelTxt) labelTxt.style.color = (color === "#FFFF00") ? "#B8860B" : color;
+            if (labelTxt) labelTxt.style.color = (color === "#F5C842") ? "#B8860B" : color;
         }
 
         // แสดงค่าที่ฝังในไฟล์ทันที (ใช้ได้แม้เปิดแบบ file://) แล้วค่อยลองดึงค่าสดทับ
@@ -320,6 +414,7 @@
             } catch (e) { console.error("Embedded data error:", e); }
         }
 
+        buildAqiScale();
         loadEmbedded();
         fetchAirData();
         // โหลดหน้าใหม่ทุก 5 นาทีเพื่ออ่านค่าที่ GitHub Actions เพิ่งฝังลงไฟล์ (?t= กันแคช)
