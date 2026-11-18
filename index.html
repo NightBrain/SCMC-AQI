@@ -273,20 +273,18 @@
         </div>
     </div>
 
-    <!-- fetch_weather.py เขียนค่าล่าสุดจาก API ของ CMU ลงตรงนี้ทุกชั่วโมง (อย่าแก้มือ) -->
-    <script id="embedded-data" type="application/json">/*EMBED_START*/{"timestamp": "18/11/2026 16:00:00", "aqi": 25.0, "temp": 29.56}/*EMBED_END*/</script>
-
     <script>
-        // ดึงค่าสดจาก API ของ CMU ลองตามลำดับ ถ้าไม่ได้จะใช้ค่าที่ฝังไว้ในไฟล์
+        // ดึงค่าสดจาก API ของ CMU ลองตามลำดับ ถ้าไม่ได้จะแสดง -- และลองใหม่
         // API ของ CMU ไม่เปิด CORS เบราว์เซอร์เรียกตรงไม่ได้ จึงมี CORS proxy สาธารณะเป็นตัวสำรอง
         // (ฟรี ไม่รับประกันว่าจะใช้ได้ตลอด ถ้าตัวไหนเลิกให้บริการจะข้ามไปตัวถัดไปเอง)
         var API_URL = 'https://dashboard.acair.cmu.ac.th/api/data?reslution=';
         var API_ENC = encodeURIComponent(API_URL);
+        // เรียงตามความเร็ว/เสถียรภาพที่ทดสอบได้ (allorigins ช้าและล่มบ่อย) เรียกตรงไว้ท้ายสุดเผื่อ CMU เปิด CORS ในอนาคต
         var DATA_SOURCES = [
-            { url: API_URL, parse: JSON.parse },
+            { url: 'https://r.jina.ai/' + API_URL, parse: function (t) { return JSON.parse(t.slice(t.indexOf('{', t.indexOf('Markdown Content:')))); } },
             { url: 'https://api.allorigins.win/raw?url=' + API_ENC, parse: JSON.parse },
             { url: 'https://api.allorigins.win/get?url=' + API_ENC, parse: function (t) { return JSON.parse(JSON.parse(t).contents); } },
-            { url: 'https://r.jina.ai/' + API_URL, parse: function (t) { return JSON.parse(t.slice(t.indexOf('{', t.indexOf('Markdown Content:')))); } }
+            { url: API_URL, parse: JSON.parse }
         ];
         var CACHE_KEY = 'aqi-cache';
         var CACHE_TTL = 10 * 60 * 1000;  // เช็คค่าใหม่ทุก 10 นาที
@@ -331,7 +329,7 @@
             if (i >= DATA_SOURCES.length) { if (done) done(false); return; }
             var xhr = new XMLHttpRequest();
             xhr.open('GET', DATA_SOURCES[i].url, true);
-            xhr.timeout = 15000;
+            xhr.timeout = 10000;
             xhr.onreadystatechange = function () {
                 if (xhr.readyState !== 4) return;
                 try {
@@ -431,15 +429,6 @@
             if (labelTxt) labelTxt.style.color = (color === "#F5C842") ? "#B8860B" : color;
         }
 
-        // แสดงค่าที่ฝังในไฟล์ทันที (ใช้ได้แม้เปิดแบบ file://) แล้วค่อยลองดึงค่าสดทับ
-        function loadEmbedded() {
-            try {
-                var txt = document.getElementById('embedded-data').textContent.replace(/\/\*[A-Z_]+\*\//g, '');
-                var d = JSON.parse(txt);
-                renderUI(Number(d.aqi), Number(d.temp), d.timestamp);
-            } catch (e) { console.error("Embedded data error:", e); }
-        }
-
         // แคชใน localStorage อายุ 10 นาที: ถ้ายังสดใช้ค่าในแคชเลย ไม่ยิง API แล้วนัดเช็คใหม่ตอนแคชหมดอายุ
         function refresh() {
             var c = readCache(), age = c ? Date.now() - c.t : Infinity;
@@ -452,9 +441,8 @@
         }
 
         buildAqiScale();
-        loadEmbedded();
         refresh();
-        // โหลดหน้าใหม่ทุกชั่วโมงเพื่อรับโค้ดใหม่และค่าที่ GitHub Actions ฝังลงไฟล์ (?t= กันแคช)
+        // โหลดหน้าใหม่ทุกชั่วโมงเพื่อรับโค้ดเวอร์ชันล่าสุด (?t= กันแคช)
         setInterval(function () { location.replace(location.pathname + '?t=' + Date.now()); }, 3600000);
     </script>
 </body>
