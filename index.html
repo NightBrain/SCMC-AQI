@@ -277,10 +277,20 @@
     <script id="embedded-data" type="application/json">/*EMBED_START*/{"timestamp": "18/11/2026 16:00:00", "aqi": 25.0, "temp": 29.56}/*EMBED_END*/</script>
 
     <script>
-        // ลองเรียก API ของ CMU ตรงๆ (ใช้ได้ถ้า API เปิด CORS) ถ้าไม่ได้จะใช้ค่าที่ฝังไว้ในไฟล์
-        var DATA_URLS = [
-            'https://dashboard.acair.cmu.ac.th/api/data?reslution='
+        // ดึงค่าสดจาก API ของ CMU ลองตามลำดับ ถ้าไม่ได้จะใช้ค่าที่ฝังไว้ในไฟล์
+        // API ของ CMU ไม่เปิด CORS เบราว์เซอร์เรียกตรงไม่ได้ จึงมี CORS proxy สาธารณะเป็นตัวสำรอง
+        // (ฟรี ไม่รับประกันว่าจะใช้ได้ตลอด ถ้าตัวไหนเลิกให้บริการจะข้ามไปตัวถัดไปเอง)
+        var API_URL = 'https://dashboard.acair.cmu.ac.th/api/data?reslution=';
+        var API_ENC = encodeURIComponent(API_URL);
+        var DATA_SOURCES = [
+            { url: API_URL, parse: JSON.parse },
+            { url: 'https://api.allorigins.win/raw?url=' + API_ENC, parse: JSON.parse },
+            { url: 'https://api.allorigins.win/get?url=' + API_ENC, parse: function (t) { return JSON.parse(JSON.parse(t).contents); } },
+            { url: 'https://r.jina.ai/' + API_URL, parse: function (t) { return JSON.parse(t.slice(t.indexOf('{', t.indexOf('Markdown Content:')))); } }
         ];
+        var CACHE_KEY = 'aqi-cache';
+        var CACHE_TTL = 10 * 60 * 1000;  // เช็คค่าใหม่ทุก 10 นาที
+        var RETRY_MS = 60 * 1000;        // ดึงไม่สำเร็จ ลองใหม่ทุก 1 นาที
 
         function getThermometerIcon(color) {
             return '<svg viewBox="0 0 100 100" style="width:100%; height:100%; overflow:visible;">' +
@@ -303,21 +313,37 @@
                 'อัปเดตล่าสุด ' + m[1] + '/' + m[2] + '/' + m[3] + ' ' + m[4] + ' น.';
         }
 
-        function fetchAirData(i) {
+        function readCache() {
+            try {
+                var c = JSON.parse(localStorage.getItem(CACHE_KEY));
+                if (c && typeof c.t === 'number' && c.d) return c;
+            } catch (e) { }
+            return null;
+        }
+
+        function writeCache(d) {
+            try { localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), d: d })); } catch (e) { }
+        }
+
+        // done(ok) ถูกเรียกเมื่อดึงสำเร็จ หรือลองครบทุก URL แล้วไม่สำเร็จ
+        function fetchAirData(i, done) {
             i = i || 0;
-            if (i >= DATA_URLS.length) return;
+            if (i >= DATA_SOURCES.length) { if (done) done(false); return; }
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', DATA_URLS[i], true);
+            xhr.open('GET', DATA_SOURCES[i].url, true);
+            xhr.timeout = 15000;
             xhr.onreadystatechange = function () {
                 if (xhr.readyState !== 4) return;
                 try {
                     if (xhr.status !== 200) throw new Error('HTTP ' + xhr.status);
-                    var r = JSON.parse(xhr.responseText);
+                    var r = DATA_SOURCES[i].parse(xhr.responseText);
                     if (r.status !== 'success') throw new Error('API status ' + r.status);
                     renderUI(Number(r.data.aqi), Number(r.data.temp), r.data.timestamp);
+                    writeCache({ aqi: r.data.aqi, temp: r.data.temp, timestamp: r.data.timestamp });
+                    if (done) done(true);
                 } catch (e) {
-                    console.error(DATA_URLS[i], e);
-                    fetchAirData(i + 1);
+                    console.error(DATA_SOURCES[i].url, e);
+                    fetchAirData(i + 1, done);
                 }
             };
             xhr.send();
@@ -414,12 +440,22 @@
             } catch (e) { console.error("Embedded data error:", e); }
         }
 
+        // แคชใน localStorage อายุ 10 นาที: ถ้ายังสดใช้ค่าในแคชเลย ไม่ยิง API แล้วนัดเช็คใหม่ตอนแคชหมดอายุ
+        function refresh() {
+            var c = readCache(), age = c ? Date.now() - c.t : Infinity;
+            if (age >= 0 && age < CACHE_TTL) {
+                renderUI(Number(c.d.aqi), Number(c.d.temp), c.d.timestamp);
+                setTimeout(refresh, CACHE_TTL - age + 1000);
+            } else {
+                fetchAirData(0, function (ok) { setTimeout(refresh, ok ? CACHE_TTL : RETRY_MS); });
+            }
+        }
+
         buildAqiScale();
         loadEmbedded();
-        fetchAirData();
-        // โหลดหน้าใหม่ทุก 5 นาทีเพื่ออ่านค่าที่ GitHub Actions เพิ่งฝังลงไฟล์ (?t= กันแคช)
-        setInterval(function () { location.replace(location.pathname + '?t=' + Date.now()); }, 300000);
-        setInterval(function () { fetchAirData(); }, 300000);
+        refresh();
+        // โหลดหน้าใหม่ทุกชั่วโมงเพื่อรับโค้ดใหม่และค่าที่ GitHub Actions ฝังลงไฟล์ (?t= กันแคช)
+        setInterval(function () { location.replace(location.pathname + '?t=' + Date.now()); }, 3600000);
     </script>
 </body>
 
