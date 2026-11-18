@@ -289,6 +289,11 @@
         var CACHE_KEY = 'aqi-cache';
         var CACHE_TTL = 10 * 60 * 1000;  // เช็คค่าใหม่ทุก 10 นาที
         var RETRY_MS = 60 * 1000;        // ดึงไม่สำเร็จ ลองใหม่ทุก 1 นาที
+        var WAIT_MS = 20 * 1000;         // รอข้อมูลชั่วโมงใหม่ เช็คทุก 20 วินาที
+        var START_MS = 5 * 60 * 1000;    // เริ่มเช็คชั่วโมงใหม่ที่ hh:05:00 (CMU ปล่อยค่าราว hh:03)
+        var HOUR_MS = 60 * 60 * 1000;
+        var TZ_MS = 7 * HOUR_MS;         // timestamp จาก API เป็นเวลาไทย (UTC+7)
+        var FAST_WINDOW_MS = 20 * 60 * 1000;  // ช่วงต้นชั่วโมงที่ถี่ขึ้นเพื่อรอข้อมูลใหม่
 
         function getThermometerIcon(color) {
             return '<svg viewBox="0 0 100 100" style="width:100%; height:100%; overflow:visible;">' +
@@ -429,14 +434,33 @@
             if (labelTxt) labelTxt.style.color = (color === "#F5C842") ? "#B8860B" : color;
         }
 
-        // แคชใน localStorage อายุ 10 นาที: ถ้ายังสดใช้ค่าในแคชเลย ไม่ยิง API แล้วนัดเช็คใหม่ตอนแคชหมดอายุ
+        // "dd/mm/yyyy HH:MM:SS" (เวลาไทย) -> epoch ms
+        function tsToEpoch(ts) {
+            var m = /^(\d\d)\/(\d\d)\/(\d{4}) (\d\d):(\d\d):(\d\d)/.exec(ts || '');
+            return m ? Date.UTC(+m[3], +m[2] - 1, +m[1], +m[4] - 7, +m[5], +m[6]) : NaN;
+        }
+
+        // ข้อมูลออกทุกต้นชั่วโมง: นัดเช็คที่ hh:05:00 แล้วถ้าข้อมูลยังเป็นของชั่วโมงก่อนให้เช็คทุก 20 วินาทีจนกว่าจะมาใหม่
+        function nextDelay(ts) {
+            var now = Date.now();
+            var hourStart = Math.floor((now + TZ_MS) / HOUR_MS) * HOUR_MS - TZ_MS;
+            var since = now - hourStart;
+            if (since < FAST_WINDOW_MS && tsToEpoch(ts) < hourStart) return Math.max(WAIT_MS, START_MS - since);
+            return Math.min(CACHE_TTL, hourStart + HOUR_MS + START_MS - now);
+        }
+
+        // แคชใน localStorage: ถ้ายังสดใช้ค่าในแคชเลย ไม่ยิง API แล้วนัดเช็คใหม่ตอนแคชหมดอายุ
         function refresh() {
             var c = readCache(), age = c ? Date.now() - c.t : Infinity;
-            if (age >= 0 && age < CACHE_TTL) {
+            var wait = c ? nextDelay(c.d.timestamp) : 0;
+            if (age >= 0 && age < wait) {
                 renderUI(Number(c.d.aqi), Number(c.d.temp), c.d.timestamp);
-                setTimeout(refresh, CACHE_TTL - age + 1000);
+                setTimeout(refresh, wait - age + 1000);
             } else {
-                fetchAirData(0, function (ok) { setTimeout(refresh, ok ? CACHE_TTL : RETRY_MS); });
+                fetchAirData(0, function (ok) {
+                    var fresh = ok && readCache();
+                    setTimeout(refresh, fresh ? nextDelay(fresh.d.timestamp) : RETRY_MS);
+                });
             }
         }
 
