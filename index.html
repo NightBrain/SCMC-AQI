@@ -3,647 +3,319 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>SCMC Air Quality v2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCMC - Air Quality</title>
     <link rel="icon" type="image/png"
-        href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAAAXNSR0IArs4c6QAAAHhlWElmTU0AKgAAAAgABAEaAAUAAAABAAAAPgEbAAUAAAABAAAARgEoAAMAAAABAAIAAIdpAAQAAAABAAAATgAAAAAAAABIAAAAAQAAAEgAAAABAAOgAQADAAAAAQABAACgAgAEAAAAAQAAAICgAwAEAAAAAQAAAIAAAAAAewEwQAAAAAlwSFlzAAALEwAACxMBAJqcGAAAHcZJREFUeAHtXQt0VdWZ/s8595EQQpBHiOEVAgIqIBAQRHyMVsRXtZAEhbGdhdM80FWrxbKmL+m0s6a2VOuMkpCprtVSUJJIdbT1bR1RRAnhKQJCCK8IISAhQHIf55z5/nNzw01yc3Ne9+aGZK+VnHPP2c//+/e///3vf+8jUA8Ly5eXug4caHI6nSmiIHic3HxVdft8vnqlqSnBV1aW6+1JJBEutcYuXfp2UkNDQ7rDIWaoqpqpkMrXYSJRqkrUH+3tKwiUqKqCA9BrDEAk+ARB9asqNeL9OcQ7g2utIAhHRRKqca3y+5Xq5OTkmhUrbj9/KdGs2zPAo4++PsLr9U4mkWaSok4lQR0LQNMEQUwURQcBbPRw/lOAm4orfjSH4D0Abn4iaPGRHldA35xWUfycHsyhHidV2EeiUEkKbXK5XNueffaew8H8uuM12PJuU/e8vNf7SFJTFio8ByDdDBAnipIjRRRFUhQGWGaw8HcRaDsax0wSYAqJRFFAWQopsr8ez3eivA9RxjuynLClpOSeC3aUF6s8ugUD5OWtckrSgJlE4jz0wjvQQcc5HK4ACFrvtBdsvcRnpmApw8zn93tZbuwB371FpKyX5dObSkryfXrz6qp4cc0AS5a8OlwV/DkQuwshvadKDqfA4lhR5K6iV8RyRZGlg4Nkv08FN1RiOForqI6ylSvvOxIxYRe+jEsGKCgon4JxNh+Vmy9JzkEs1mXZ34VkMl60JLH+IaHevjrIp1egn6wqLs7eajyn6KaIKwYoLHxlJnrOD9Hk+wC8G8TTxvPokiC6ubPedLE870P">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Font Awesome 6 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        href="data:image/png;base64,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">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            font-family: 'Prompt', sans-serif;
+        }
 
-    <script>
-        // ตั้งธีมก่อนวาดหน้า กันภาพกะพริบ (ค่าเริ่มต้น = มืด)
-        try {
-            document.documentElement.setAttribute('data-theme', localStorage.getItem('scmc-theme') === 'light' ? 'light' : 'dark');
-        } catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
-    </script>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #F3F3F3;
+            overflow: hidden;
+            position: relative;
+        }
 
-    <link rel="stylesheet" href="style.css">
+        #bottom-bar {
+            width: 100%;
+            height: 65%;
+            position: absolute;
+            top: 35%;
+            left: 0;
+            background: #95a5a6;
+            -webkit-transition: background 0.8s ease-in-out;
+            transition: background 0.8s ease-in-out;
+            z-index: 1;
+        }
+
+        .screen-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header-text {
+            position: absolute;
+            width: 100%;
+            top: 3vh;
+            text-align: center;
+            color: black;
+            font-size: 13vh;
+            font-weight: 700;
+        }
+
+        .main-card {
+            width: 86%;
+            height: 42vh;
+            left: 7%;
+            top: 27vh;
+            position: absolute;
+            background: white;
+            border-radius: 9vh;
+            z-index: 20;
+            -webkit-box-shadow: 0px 4px 100px rgba(0, 0, 0, 0.25);
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+        }
+
+        .aqi-section {
+            -webkit-flex: 2;
+            flex: 2;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-flex-direction: column;
+            flex-direction: column;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-align-items: center;
+            align-items: center;
+            padding-left: 2vh;
+        }
+
+        .aqi-row {
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+        }
+
+        .aqi-scale {
+            position: relative;
+            width: 80vh;
+            margin-top: 2vh;
+            padding-bottom: 3.5vh;
+        }
+
+        .scale-bar {
+            display: -webkit-flex;
+            display: flex;
+            height: 1.8vh;
+        }
+
+        .scale-seg {
+            -webkit-flex: 1;
+            flex: 1;
+            margin-left: 0.6vh;
+        }
+
+        .scale-seg:first-child {
+            margin-left: 0;
+            border-radius: 1vh 0 0 1vh;
+        }
+
+        .scale-seg:last-child {
+            border-radius: 0 1vh 1vh 0;
+        }
+
+        .scale-tick {
+            position: absolute;
+            top: 3vh;
+            font-size: 2.2vh;
+            line-height: 1;
+            color: #7a8a92;
+            -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+        }
+
+        .scale-marker {
+            position: absolute;
+            top: -0.9vh;
+            width: 0.9vh;
+            height: 3.6vh;
+            margin-left: -0.45vh;
+            border-radius: 0.45vh;
+            background: #17394a;
+            border: 0.25vh solid white;
+            -webkit-box-sizing: content-box;
+            box-sizing: content-box;
+            left: 0;
+            transition: left 0.8s ease-in-out;
+        }
+
+        #status-icon {
+            width: 19vh;
+            height: 19vh;
+            margin-right: 5vh;
+            -webkit-animation: floating 1.5s ease-in-out infinite;
+        }
+
+        #aqi-value {
+            font-size: 24vh;
+            font-weight: 700;
+            color: #95a5a6;
+            line-height: 1;
+            transition: color 0.8s;
+        }
+
+        .aqi-label {
+            font-size: 3.5vh;
+            font-weight: 700;
+            color: #95a5a6;
+            margin-top: -1vh;
+            text-align: center;
+            transition: color 0.8s;
+        }
+
+        .divider {
+            width: 5px;
+            height: 30vh;
+            background: #95a5a6;
+            opacity: 0.5;
+            transition: background 0.8s;
+        }
+
+        .temp-section {
+            -webkit-flex: 1;
+            flex: 1;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-align-items: center;
+            align-items: center;
+        }
+
+        #weather-icon-box {
+            width: 8vh;
+            height: 20vh;
+            margin-right: 5vh;
+            display: block;
+            overflow: visible;
+        }
+
+        #temp-value {
+            font-size: 10vh;
+            font-weight: 700;
+            color: #95a5a6;
+            transition: color 0.8s;
+        }
+
+        #status-text-large {
+            position: absolute;
+            width: 100%;
+            top: 72vh;
+            text-align: center;
+            color: white;
+            font-size: 13vh;
+            font-weight: 700;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            padding: 0 5%;
+        }
+
+        .footer-info {
+            position: absolute;
+            width: 100%;
+            bottom: 3vh;
+            text-align: center;
+            color: white;
+            font-size: 3.5vh;
+            font-weight: 400;
+        }
+
+        @-webkit-keyframes floating {
+            0% {
+                -webkit-transform: translateY(0px);
+            }
+
+            50% {
+                -webkit-transform: translateY(-20px);
+            }
+
+            100% {
+                -webkit-transform: translateY(0px);
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <div class="app-wrapper">
-        <!-- Top Glance Header -->
-        <header>
-            <div class="brand">
-                <span class="brand-badge"><i class="fa-solid fa-wind anim-wind"></i> AQI</span>
-                <div>
-                    <h1 class="brand-title">SCMC Air Quality <span class="brand-sub"><i class="fa-solid fa-location-dot" style="color:var(--theme-text);"></i> สถานี ACAIR CMU</span></h1>
+
+    <div id="bottom-bar"></div>
+
+    <div class="screen-container">
+        <div class="header-text">คุณภาพอากาศวันนี้</div>
+
+        <div class="main-card">
+            <div class="aqi-section">
+                <div class="aqi-row">
+                    <div id="status-icon"></div>
+                    <div>
+                        <div id="aqi-value">--</div>
+                        <div class="aqi-label">AQI</div>
+                    </div>
                 </div>
+                <div class="aqi-scale" id="aqi-scale"></div>
             </div>
 
-            <div class="header-meta">
-                <span><span class="live-dot"></span> สด</span>
-                <span id="txt-updated">อัปเดตล่าสุด --/--/---- --:--</span>
-                <button class="btn-refresh" id="btn-theme" onclick="toggleTheme()" aria-label="สลับธีมสว่าง/มืด" title="สลับธีมสว่าง/มืด">
-                    <i class="fa-solid fa-sun" id="theme-icon"></i> <span id="theme-label" class="btn-text">สว่าง</span>
-                </button>
-                <button class="btn-refresh" onclick="manualRefresh()">
-                    <i class="fa-solid fa-rotate-right"></i> <span class="btn-text">รีเฟรช</span>
-                </button>
+            <div id="mid-line" class="divider"></div>
+
+            <div class="temp-section">
+                <div id="weather-icon-box"></div>
+                <div id="temp-value">--°C</div>
             </div>
-        </header>
+        </div>
 
-        <!-- Main Dashboard: Balanced 2 Columns -->
-        <main class="main-layout">
-            <!-- LEFT: Hero AQI Giant Card -->
-            <section class="glass-panel hero-panel">
-                <div class="hero-top-row">
-                    <span class="hero-label"><i class="fa-solid fa-chart-pie" style="color:var(--theme-color);"></i> ดัชนีคุณภาพอากาศ (AQI)</span>
-                    <span class="hero-status-pill" id="hero-status-pill">กำลังตรวจวัด...</span>
-                </div>
+        <div id="status-text-large">กำลังเชื่อมต่อ...</div>
 
-                <div class="hero-center">
-                    <div class="hero-mascot-box" id="hero-mascot">
-                        <!-- Mood Mascot SVG -->
-                    </div>
-                    <div class="hero-val-group">
-                        <span class="hero-aqi-num" id="val-aqi">--</span>
-                    </div>
-                </div>
-
-                <!-- 3 Action Badges with Animated Font Awesome Icons -->
-                <div class="hero-actions">
-                    <div class="act-item">
-                        <div class="act-left">
-                            <div class="act-icon-wrap" style="color:#38bdf8;">
-                                <i class="fa-solid fa-person-running anim-run"></i>
-                            </div>
-                            <span>กิจกรรมกลางแจ้ง</span>
-                        </div>
-                        <div class="act-right" id="act-outdoor">--</div>
-                    </div>
-
-                    <div class="act-item">
-                        <div class="act-left">
-                            <div class="act-icon-wrap" style="color:#f59e0b;">
-                                <i class="fa-solid fa-head-side-mask anim-pulse"></i>
-                            </div>
-                            <span>หน้ากากอนามัย</span>
-                        </div>
-                        <div class="act-right" id="act-mask">--</div>
-                    </div>
-
-                    <div class="act-item">
-                        <div class="act-left">
-                            <div class="act-icon-wrap" style="color:#10b981;">
-                                <i class="fa-solid fa-door-open anim-wind"></i>
-                            </div>
-                            <span>การระบายอากาศ</span>
-                        </div>
-                        <div class="act-right" id="act-window">--</div>
-                    </div>
-                </div>
-
-                <!-- Spectrum Scale Bar -->
-                <div class="scale-box">
-                    <div class="scale-bar" id="scale-bar">
-                        <div class="scale-pin" id="scale-pin"></div>
-                    </div>
-                    <div class="scale-labels">
-                        <span><b>0</b>ดีมาก</span>
-                        <span><b>25</b>ดี</span>
-                        <span><b>50</b>ปานกลาง</span>
-                        <span><b>100</b>เริ่มมีผล</span>
-                        <span><b>150</b>มีผล</span>
-                        <span><b>200+</b>อันตราย</span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- RIGHT: Balanced Cards + Weather + Trend -->
-            <section class="right-layout">
-                <div class="right-top">
-                <!-- 5 Air Pollutants -->
-                <div class="section-wrap">
-                    <div class="section-label"><i class="fa-solid fa-smog"></i> มลพิษทางอากาศ (Air Pollutants)</div>
-                    <div class="pollutants-grid">
-                        <!-- PM2.5 -->
-                        <div class="stat-card" style="--c:#38bdf8">
-                            <div class="stat-top">
-                                <span class="stat-name-box">
-                                    <span class="stat-chip"><i class="fa-solid fa-cloud-showers-heavy stat-fa-icon anim-pulse"></i></span><span class="stat-name-text"><b>PM2.5</b><small>ฝุ่นละออง</small></span>
-                                </span>
-                            </div>
-                            <div class="stat-val-group">
-                                <span class="stat-val" id="val-pm25">--</span>
-                                <span class="stat-unit">µg/m³</span>
-                            </div>
-                            <div class="stat-status-row"><span class="stat-badge" id="badge-pm25">--</span><span class="stat-desc">ฝุ่นละอองจิ๋ว</span></div>
-                            <div class="stat-meter"><div class="stat-fill" id="fill-pm25" style="width:0%"></div></div>
-                        </div>
-
-                        <!-- O3 -->
-                        <div class="stat-card" style="--c:#fbbf24">
-                            <div class="stat-top">
-                                <span class="stat-name-box">
-                                    <span class="stat-chip"><i class="fa-solid fa-sun stat-fa-icon anim-spin-slow"></i></span><span class="stat-name-text"><b>โอโซน</b><small>O₃</small></span>
-                                </span>
-                            </div>
-                            <div class="stat-val-group">
-                                <span class="stat-val" id="val-o3">--</span>
-                                <span class="stat-unit">ppb</span>
-                            </div>
-                            <div class="stat-status-row"><span class="stat-badge" id="badge-o3">--</span><span class="stat-desc">แดด+ไอเสีย</span></div>
-                            <div class="stat-meter"><div class="stat-fill" id="fill-o3" style="width:0%"></div></div>
-                        </div>
-
-                        <!-- CO -->
-                        <div class="stat-card" style="--c:#f472b6">
-                            <div class="stat-top">
-                                <span class="stat-name-box">
-                                    <span class="stat-chip"><i class="fa-solid fa-car-side stat-fa-icon anim-wind"></i></span><span class="stat-name-text"><b>ควันรถ</b><small>CO</small></span>
-                                </span>
-                            </div>
-                            <div class="stat-val-group">
-                                <span class="stat-val" id="val-co">--</span>
-                                <span class="stat-unit">ppm</span>
-                            </div>
-                            <div class="stat-status-row"><span class="stat-badge" id="badge-co">--</span><span class="stat-desc">คาร์บอนมอนอกไซด์</span></div>
-                            <div class="stat-meter"><div class="stat-fill" id="fill-co" style="width:0%"></div></div>
-                        </div>
-
-                        <!-- NO2 -->
-                        <div class="stat-card" style="--c:#c084fc">
-                            <div class="stat-top">
-                                <span class="stat-name-box">
-                                    <span class="stat-chip"><i class="fa-solid fa-truck-moving stat-fa-icon anim-wind"></i></span><span class="stat-name-text"><b>ไอเสีย</b><small>NO₂</small></span>
-                                </span>
-                            </div>
-                            <div class="stat-val-group">
-                                <span class="stat-val" id="val-no2">--</span>
-                                <span class="stat-unit">ppb</span>
-                            </div>
-                            <div class="stat-status-row"><span class="stat-badge" id="badge-no2">--</span><span class="stat-desc">ก๊าซท่อไอเสีย</span></div>
-                            <div class="stat-meter"><div class="stat-fill" id="fill-no2" style="width:0%"></div></div>
-                        </div>
-
-                        <!-- SO2 -->
-                        <div class="stat-card" style="--c:#a3e635">
-                            <div class="stat-top">
-                                <span class="stat-name-box">
-                                    <span class="stat-chip"><i class="fa-solid fa-industry stat-fa-icon anim-pulse"></i></span><span class="stat-name-text"><b>ก๊าซพิษ</b><small>SO₂</small></span>
-                                </span>
-                            </div>
-                            <div class="stat-val-group">
-                                <span class="stat-val" id="val-so2">--</span>
-                                <span class="stat-unit">ppb</span>
-                            </div>
-                            <div class="stat-status-row"><span class="stat-badge" id="badge-so2">--</span><span class="stat-desc">ซัลเฟอร์ไดออกไซด์</span></div>
-                            <div class="stat-meter"><div class="stat-fill" id="fill-so2" style="width:0%"></div></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 4 Weather Parameters -->
-                <div class="section-wrap">
-                    <div class="section-label"><i class="fa-solid fa-cloud-sun"></i> สภาพอากาศและลม (Weather & Wind)</div>
-                    <div class="weather-grid">
-                        <!-- Temp -->
-                        <div class="weather-card" style="--c:#fb923c">
-                            <div class="weather-icon-circle">
-                                <i class="fa-solid fa-temperature-half anim-temp"></i>
-                            </div>
-                            <div class="weather-info">
-                                <span class="weather-label">อุณหภูมิ</span>
-                                <div class="weather-val-box"><span id="val-temp">--</span> <span style="font-size:0.65em; color:var(--text-2);">°C</span></div>
-                                <span class="weather-hint" id="hint-temp">สบาย</span>
-                            </div>
-                        </div>
-
-                        <!-- Humidity -->
-                        <div class="weather-card" style="--c:#22d3ee">
-                            <div class="weather-icon-circle">
-                                <i class="fa-solid fa-droplet anim-drop"></i>
-                            </div>
-                            <div class="weather-info">
-                                <span class="weather-label">ความชื้น</span>
-                                <div class="weather-val-box"><span id="val-hum">--</span> <span style="font-size:0.65em; color:var(--text-2);">%</span></div>
-                                <span class="weather-hint" id="hint-hum">ชุ่มชื้น</span>
-                            </div>
-                        </div>
-
-                        <!-- Wind -->
-                        <div class="weather-card" style="--c:#34d399">
-                            <div class="weather-icon-circle" id="wind-icon">
-                                <i class="fa-solid fa-compass"></i>
-                            </div>
-                            <div class="weather-info">
-                                <span class="weather-label">แรงลม & ทิศ</span>
-                                <div class="weather-val-box"><span id="val-wind">--</span> <span style="font-size:0.65em; color:var(--text-2);">m/s</span></div>
-                                <span class="weather-hint" id="hint-wind">ทิศเหนือ</span>
-                            </div>
-                        </div>
-
-                        <!-- Pressure -->
-                        <div class="weather-card" style="--c:#a78bfa">
-                            <div class="weather-icon-circle">
-                                <i class="fa-solid fa-gauge-high anim-pulse"></i>
-                            </div>
-                            <div class="weather-info">
-                                <span class="weather-label">ความกดอากาศ</span>
-                                <div class="weather-val-box"><span id="val-press">--</span> <span style="font-size:0.65em; color:var(--text-2);">hPa</span></div>
-                                <span class="weather-hint">ระดับปกติ</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                </div><!-- /right-top -->
-
-                <!-- 24-Hour Trend Chart Panel -->
-                <div class="trend-panel">
-                    <div class="trend-header">
-                        <span class="trend-title">
-                            <i class="fa-solid fa-chart-line" style="color:#38bdf8;"></i> แนวโน้ม 24 ชั่วโมงย้อนหลัง
-                        </span>
-                        <div class="tab-btn-group">
-                            <button class="tab-btn active" onclick="switchMetric('pm25')">PM2.5</button>
-                            <button class="tab-btn" onclick="switchMetric('temp')">อุณหภูมิ</button>
-                            <button class="tab-btn" onclick="switchMetric('hum')">ความชื้น</button>
-                        </div>
-                    </div>
-                    <div class="chart-box" id="chart-box">
-                        <div class="chart-tooltip" id="chart-tooltip"></div>
-                        <svg class="chart-svg" id="chart-svg"></svg>
-                    </div>
-                </div>
-            </section>
-        </main>
+        <div class="footer-info">
+            <span id="station-name">ACAIR CMU</span> | <span id="current-time">อัปเดตล่าสุด --:--</span>
+        </div>
     </div>
 
     <script>
+        // ดึงค่าสดจาก API ของ CMU ลองตามลำดับ ถ้าไม่ได้จะแสดง -- และลองใหม่
+        // API ของ CMU ไม่เปิด CORS เบราว์เซอร์เรียกตรงไม่ได้ จึงมี CORS proxy สาธารณะเป็นตัวสำรอง
+        // (ฟรี ไม่รับประกันว่าจะใช้ได้ตลอด ถ้าตัวไหนเลิกให้บริการจะข้ามไปตัวถัดไปเอง)
         var API_URL = 'https://dashboard.acair.cmu.ac.th/api/data?reslution=';
         var API_ENC = encodeURIComponent(API_URL);
+        // เรียงตามความเร็ว/เสถียรภาพที่ทดสอบได้ (allorigins ช้าและล่มบ่อย) เรียกตรงไว้ท้ายสุดเผื่อ CMU เปิด CORS ในอนาคต
         var DATA_SOURCES = [
             { url: 'https://r.jina.ai/' + API_URL, parse: function (t) { return JSON.parse(t.slice(t.indexOf('{', t.indexOf('Markdown Content:')))); } },
             { url: 'https://api.allorigins.win/raw?url=' + API_ENC, parse: JSON.parse },
             { url: 'https://api.allorigins.win/get?url=' + API_ENC, parse: function (t) { return JSON.parse(JSON.parse(t).contents); } },
             { url: API_URL, parse: JSON.parse }
         ];
+        var CACHE_KEY = 'aqi-cache';
+        var CACHE_TTL = 10 * 60 * 1000;  // เช็คค่าใหม่ทุก 10 นาที
+        var RETRY_MS = 60 * 1000;        // ดึงไม่สำเร็จ ลองใหม่ทุก 1 นาที
+        var WAIT_MS = 20 * 1000;         // รอข้อมูลชั่วโมงใหม่ เช็คทุก 20 วินาที
+        var START_MS = 5 * 60 * 1000;    // เริ่มเช็คชั่วโมงใหม่ที่ hh:05:00 (CMU ปล่อยค่าราว hh:03)
+        var HOUR_MS = 60 * 60 * 1000;
+        var TZ_MS = 7 * HOUR_MS;         // timestamp จาก API เป็นเวลาไทย (UTC+7)
+        var FAST_WINDOW_MS = 20 * 60 * 1000;  // ช่วงต้นชั่วโมงที่ถี่ขึ้นเพื่อรอข้อมูลใหม่
 
-        var CACHE_KEY = 'aqi-v2-cache';
-        var CACHE_TTL = 10 * 60 * 1000;
-        var currentData = null;
-        var currentMetric = 'pm25';
-        var lastChartSize = '';
-
-        var TIERS = [
-            {
-                max: 25, color: "#10b981", text: "คุณภาพดีมาก",
-                outdoor: "ทำได้เต็มที่", mask: "ไม่ต้องใส่", window: "เปิดรับลมได้",
-                face: '<svg viewBox="0 0 80 80" width="100%" height="100%"><circle cx="40" cy="40" r="38" fill="#10b981"/><circle cx="28" cy="32" r="5" fill="#fff"/><circle cx="52" cy="32" r="5" fill="#fff"/><path d="M26 48 Q40 64 54 48" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/></svg>'
-            },
-            {
-                max: 50, color: "#34d399", text: "คุณภาพดี",
-                outdoor: "ทำได้ปกติ", mask: "ไม่ต้องใส่", window: "เปิดถ่ายเทได้",
-                face: '<svg viewBox="0 0 80 80" width="100%" height="100%"><circle cx="40" cy="40" r="38" fill="#34d399"/><circle cx="28" cy="32" r="5" fill="#0f172a"/><circle cx="52" cy="32" r="5" fill="#0f172a"/><path d="M28 48 Q40 60 52 48" stroke="#0f172a" stroke-width="5" fill="none" stroke-linecap="round"/></svg>'
-            },
-            {
-                max: 100, color: "#fbbf24", text: "ปานกลาง",
-                outdoor: "ทำได้ปกติ", mask: "กลุ่มเสี่ยงควรมี", window: "เปิดได้พอควร",
-                face: '<svg viewBox="0 0 80 80" width="100%" height="100%"><circle cx="40" cy="40" r="38" fill="#fbbf24"/><circle cx="28" cy="32" r="5" fill="#0f172a"/><circle cx="52" cy="32" r="5" fill="#0f172a"/><line x1="30" y1="52" x2="50" y2="52" stroke="#0f172a" stroke-width="5" stroke-linecap="round"/></svg>'
-            },
-            {
-                max: 150, color: "#f97316", text: "เริ่มมีผลกระทบ",
-                outdoor: "ควรลดเวลา", mask: "ควรสวมหน้ากาก", window: "ควรปิดหน้าต่าง",
-                face: '<svg viewBox="0 0 80 80" width="100%" height="100%"><circle cx="40" cy="40" r="38" fill="#f97316"/><circle cx="28" cy="34" r="5" fill="#fff"/><circle cx="52" cy="34" r="5" fill="#fff"/><path d="M28 54 Q40 44 52 54" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/></svg>'
-            },
-            {
-                max: 200, color: "#ef4444", text: "มีผลต่อสุขภาพ",
-                outdoor: "งดกิจกรรมกลางแจ้ง", mask: "ต้องใส่ N95", window: "ปิดมิดชิด",
-                face: '<svg viewBox="0 0 80 80" width="100%" height="100%"><circle cx="40" cy="40" r="38" fill="#ef4444"/><path d="M22 30 L34 38 M34 30 L22 38" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="M46 30 L58 38 M58 30 L46 38" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="M26 56 Q40 46 54 56" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/></svg>'
-            },
-            {
-                max: 500, color: "#8b5cf6", text: "อันตรายมาก",
-                outdoor: "ห้ามออกนอกอาคาร", mask: "ต้องใส่ N95", window: "เปิดเครื่องฟอก",
-                face: '<svg viewBox="0 0 80 80" width="100%" height="100%"><circle cx="40" cy="40" r="38" fill="#8b5cf6"/><circle cx="28" cy="34" r="6" fill="#fff"/><circle cx="52" cy="34" r="6" fill="#fff"/><rect x="24" y="48" width="32" height="12" rx="4" fill="#fff"/></svg>'
-            }
-        ];
-
-        function getTier(val) {
-            if (isNaN(val) || val === null) return TIERS[0];
-            for (var i = 0; i < TIERS.length; i++) {
-                if (val <= TIERS[i].max) return TIERS[i];
-            }
-            return TIERS[TIERS.length - 1];
+        function getThermometerIcon(color) {
+            return '<svg viewBox="0 0 100 100" style="width:100%; height:100%; overflow:visible;">' +
+                '<path d="M50 20 A10 10 0 0 1 60 30 V70 A20 20 0 1 1 40 70 V30 A10 10 0 0 1 50 20 Z" fill="none" stroke="' + color + '" stroke-width="6"/>' +
+                '<circle cx="50" cy="80" r="8" fill="' + color + '"/>' +
+                '<rect x="47" y="40" width="6" height="35" rx="3" fill="' + color + '"/>' +
+                '</svg>';
         }
 
-        function initScale() {
-            var bar = document.getElementById('scale-bar');
-            var html = '';
-            for (var i = 0; i < TIERS.length; i++) {
-                html += '<div class="scale-seg" style="background:' + TIERS[i].color + '"></div>';
-            }
-            html += '<div class="scale-pin" id="scale-pin"></div>';
-            bar.innerHTML = html;
+        function getAqiIcon(color, type) {
+            var mouth = (type === 'happy') ? "M30 70 Q50 85 70 70" : "M30 80 Q50 65 70 80";
+            return '<svg viewBox="0 0 100 100" style="width:100%; height:100%;"><circle cx="50" cy="50" r="48" fill="' + color + '" /><circle cx="33" cy="40" r="6" fill="white" /><circle cx="67" cy="40" r="6" fill="white" /><path d="' + mouth + '" stroke="white" stroke-width="6" fill="none" stroke-linecap="round" /></svg>';
         }
 
-        function getPollutantStatus(type, val) {
-            if (isNaN(val) || val === null || val === '-') return { text: "-", color: "#64748b", pct: 0 };
-            val = Number(val);
-            if (type === 'pm25') {
-                if (val <= 15) return { text: "ดีมาก", color: "#10b981", pct: (val / 15) * 20 };
-                if (val <= 25) return { text: "ดี", color: "#34d399", pct: 20 + ((val - 15) / 10) * 20 };
-                if (val <= 37.5) return { text: "ปานกลาง", color: "#fbbf24", pct: 40 + ((val - 25) / 12.5) * 20 };
-                if (val <= 75) return { text: "เริ่มมีผล", color: "#f97316", pct: 60 + ((val - 37.5) / 37.5) * 20 };
-                return { text: "อันตราย", color: "#ef4444", pct: 90 };
-            }
-            if (type === 'o3') {
-                if (val <= 50) return { text: "ปลอดภัย", color: "#10b981", pct: (val / 50) * 35 };
-                if (val <= 70) return { text: "ปานกลาง", color: "#fbbf24", pct: 55 };
-                return { text: "ระคายเคือง", color: "#f97316", pct: 85 };
-            }
-            if (type === 'co') {
-                if (val <= 4.4) return { text: "ปลอดภัย", color: "#10b981", pct: (val / 4.4) * 35 };
-                if (val <= 9.0) return { text: "ปกติ", color: "#34d399", pct: 55 };
-                return { text: "ควรระวัง", color: "#f97316", pct: 85 };
-            }
-            if (type === 'no2') {
-                if (val <= 53) return { text: "ปลอดภัย", color: "#10b981", pct: (val / 53) * 35 };
-                if (val <= 100) return { text: "ปานกลาง", color: "#fbbf24", pct: 60 };
-                return { text: "เริ่มมีผล", color: "#f97316", pct: 85 };
-            }
-            if (type === 'so2') {
-                if (val <= 35) return { text: "ปลอดภัย", color: "#10b981", pct: (val / 35) * 40 };
-                if (val <= 75) return { text: "ปานกลาง", color: "#fbbf24", pct: 65 };
-                return { text: "เริ่มมีผล", color: "#f97316", pct: 85 };
-            }
-            return { text: "ปกติ", color: "#10b981", pct: 20 };
-        }
-
-        function getCompass(deg) {
-            if (isNaN(deg) || deg === null || deg === '-') return { name: "นิ่ง", deg: 0 };
-            deg = Number(deg);
-            var names = ["ทิศเหนือ (N)", "ต.อ.เหนือ (NE)", "ทิศตะวันออก (E)", "ต.อ.ใต้ (SE)", "ทิศใต้ (S)", "ต.ต.ใต้ (SW)", "ทิศตะวันตก (W)", "ต.ต.เหนือ (NW)"];
-            return { name: names[Math.round(deg / 45) % 8], deg: deg };
-        }
-
-        function render(data) {
-            if (!data) return;
-            currentData = data;
-            var aqi = Number(data.aqi);
-            var tier = getTier(aqi);
-
-            document.documentElement.style.setProperty('--theme-color', tier.color);
-
-            // Left Hero
-            document.getElementById('val-aqi').innerText = isNaN(aqi) ? "--" : aqi;
-            // เลข 1-2 หลักขยายได้ใหญ่กว่า เลข 3 หลักย่อลงให้พอดีการ์ด
-            var aqiTwoDigits = String(isNaN(aqi) ? '--' : aqi).length <= 2;
-            var heroCenter = document.querySelector('.hero-center');
-            heroCenter.style.setProperty('--aqi-w', aqiTwoDigits ? '62cqw' : '44cqw');      // เดสก์ท็อป: หน้ายิ้มอยู่เหนือเลข
-            heroCenter.style.setProperty('--aqi-w-row', aqiTwoDigits ? '43cqw' : '33cqw');  // มือถือ: หน้ายิ้มอยู่ข้างเลข
-            document.getElementById('hero-status-pill').innerText = tier.text;
-            // สีข้อความสถานะใช้ --theme-text (ปรับให้อ่านง่ายตามธีม)
-            document.getElementById('hero-mascot').innerHTML = tier.face;
-
-            document.getElementById('act-outdoor').innerText = tier.outdoor;
-            document.getElementById('act-mask').innerText = tier.mask;
-            document.getElementById('act-window').innerText = tier.window;
-
-            // Pin Position
-            var pin = 0;
-            if (!isNaN(aqi)) {
-                if (aqi <= 25) pin = (aqi / 25) * 16.6;
-                else if (aqi <= 50) pin = 16.6 + ((aqi - 25) / 25) * 16.6;
-                else if (aqi <= 100) pin = 33.3 + ((aqi - 50) / 50) * 16.6;
-                else if (aqi <= 150) pin = 50.0 + ((aqi - 100) / 50) * 16.6;
-                else if (aqi <= 200) pin = 66.6 + ((aqi - 150) / 50) * 16.6;
-                else pin = Math.min(98, 83.3 + ((aqi - 200) / 100) * 16.6);
-            }
-            document.getElementById('scale-pin').style.left = pin + '%';
-
-            // Pollutants
-            updateCard('pm25', data.pm25);
-            updateCard('o3', data.o3);
-            updateCard('co', data.co);
-            updateCard('no2', data.no2);
-            updateCard('so2', data.so2);
-
-            // Weather
-            var temp = Number(data.temp);
-            document.getElementById('val-temp').innerText = isNaN(temp) ? '--' : temp.toFixed(1);
-            document.getElementById('hint-temp').innerText = temp < 22 ? 'เย็นสบาย' : (temp > 33 ? 'ค่อนข้างร้อน' : 'สบายกำลังดี');
-
-            var hum = Number(data.hum);
-            document.getElementById('val-hum').innerText = isNaN(hum) ? '--' : Math.round(hum);
-            document.getElementById('hint-hum').innerText = hum > 75 ? 'ชุ่มชื้น' : (hum < 40 ? 'แห้ง' : 'กำลังดี');
-
-            var ws = (data.wind_speed !== undefined && data.wind_speed !== '-') ? data.wind_speed : data.ws;
-            var wd = (data.wind_dir !== undefined && data.wind_dir !== '-') ? data.wind_dir : data.wd;
-            var wsNum = Number(ws);
-            document.getElementById('val-wind').innerText = isNaN(wsNum) ? '--' : wsNum.toFixed(2);
-            var comp = getCompass(wd);
-            document.getElementById('hint-wind').innerText = comp.name;
-            if (!isNaN(comp.deg)) {
-                document.getElementById('wind-icon').style.transform = 'rotate(' + comp.deg + 'deg)';
-            }
-
-            var press = Number(data.press || data.pressure);
-            document.getElementById('val-press').innerText = isNaN(press) ? '--' : Math.round(press);
-
-            fitWeatherValues();
-
-            // timestamp จาก API รูปแบบ "dd/mm/yyyy HH:MM:SS" (เวลาไทย) -> "อัปเดตล่าสุด dd/mm/yyyy HH:MM น."
-            if (data.timestamp) {
-                var tm = /^(\d\d)\/(\d\d)\/(\d{4}) (\d\d:\d\d)/.exec(data.timestamp);
-                document.getElementById('txt-updated').innerText = tm
-                    ? 'อัปเดตล่าสุด ' + tm[1] + '/' + tm[2] + '/' + tm[3] + ' ' + tm[4] + ' น.'
-                    : 'อัปเดตล่าสุด ' + data.timestamp;
-            }
-
-            renderChart();
-        }
-
-        // ---------- สลับธีม สว่าง / มืด ----------
-        function applyThemeUI() {
-            var light = document.documentElement.getAttribute('data-theme') === 'light';
-            var icon = document.getElementById('theme-icon');
-            var label = document.getElementById('theme-label');
-            if (icon) icon.className = light ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
-            if (label) label.innerText = light ? 'มืด' : 'สว่าง';
-        }
-        function toggleTheme() {
-            var next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', next);
-            try { localStorage.setItem('scmc-theme', next); } catch (e) {}
-            applyThemeUI();
-            renderChart();
-        }
-        applyThemeUI();
-
-        // สภาพอากาศ: วัดความกว้าง "ตัวเลข + หน่วย" ที่ยาวที่สุด แล้วใช้ขนาดเดียวกันทุกการ์ด
-        function fitWeatherValues() {
-            var grid = document.querySelector('.weather-grid');
-            if (!grid) return;
-            if (!_fitCtx) _fitCtx = document.createElement('canvas').getContext('2d');
-            var maxEm = 2;
-            grid.querySelectorAll('.weather-val-box').forEach(function (box) {
-                var parts = box.querySelectorAll('span');
-                _fitCtx.font = '800 100px Prompt, sans-serif';
-                var w = _fitCtx.measureText(parts[0].innerText + ' ').width / 100;
-                w += 0.65 * _fitCtx.measureText(parts[1].innerText).width / 100;
-                maxEm = Math.max(maxEm, w);
-            });
-            grid.style.setProperty('--ww', (maxEm * 1.05).toFixed(3));
-        }
-        if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitWeatherValues);
-
-        // วัดความกว้างจริงของตัวเลข (หน่วย em) แล้วให้ทุกการ์ดใช้ขนาดเดียวกันตามค่าที่ยาวที่สุด
-        var _fitCtx = null;
-        function fitStatValues() {
-            var grid = document.querySelector('.pollutants-grid');
-            if (!grid) return;
-            if (!_fitCtx) _fitCtx = document.createElement('canvas').getContext('2d');
-            _fitCtx.font = '900 100px Prompt, sans-serif';
-            var maxEm = 1.6;
-            document.querySelectorAll('.stat-val').forEach(function (el) {
-                maxEm = Math.max(maxEm, _fitCtx.measureText(el.innerText).width / 100);
-            });
-            grid.style.setProperty('--w', (maxEm * 1.04).toFixed(3));
-        }
-        if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitStatValues);
-
-        function updateCard(key, val) {
-            var valEl = document.getElementById('val-' + key);
-            var badgeEl = document.getElementById('badge-' + key);
-            var fillEl = document.getElementById('fill-' + key);
-            if (!valEl) return;
-
-            var num = (val === '-' || val === null || val === undefined) ? '--' : Number(val).toFixed(key === 'co' ? 2 : 1);
-            valEl.innerText = num;
-            fitStatValues();
-
-            var st = getPollutantStatus(key, val);
-            badgeEl.innerText = st.text;
-            badgeEl.style.background = st.color + "25";
-            badgeEl.style.setProperty('--bc', st.color);
-
-            if (fillEl) {
-                fillEl.style.width = Math.min(100, Math.max(8, st.pct)) + '%';
-                fillEl.style.background = st.color;
-            }
-        }
-
-        function switchMetric(m) {
-            currentMetric = m;
-            var btns = document.querySelectorAll('.tab-btn');
-            btns.forEach(function (b) { b.classList.remove('active'); });
-            event.target.classList.add('active');
-            renderChart();
-        }
-
-        function renderChart() {
-            if (!currentData || !currentData.history || !currentData.history.length) return;
-            var h = currentData.history;
-            var svg = document.getElementById('chart-svg');
-            var box = document.getElementById('chart-box');
-
-            // วาดตามขนาดจริงของกล่อง (px) เพื่อให้ตัวอักษรและจุดไม่ถูกยืด/บีบ
-            var w = Math.round(box.clientWidth), hgt = Math.round(box.clientHeight);
-            if (w < 50 || hgt < 50) return;
-            lastChartSize = w + 'x' + hgt;
-            svg.setAttribute('viewBox', '0 0 ' + w + ' ' + hgt);
-
-            var rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 14;
-            var fs = Math.max(11, rem * 0.95);
-            var padL = fs * 3, padR = fs * 1.6, padT = fs * 1.1, padB = fs * 2.2;
-
-            var vals = [], times = [];
-            for (var i = 0; i < h.length; i++) {
-                var v = h[i][currentMetric];
-                vals.push((v === '-' || v === undefined || v === null) ? (vals.length ? vals[vals.length - 1] : 0) : Number(v));
-                var t = h[i].timestamp ? h[i].timestamp.split(' ')[1] : '';
-                times.push(t ? t.slice(0, 5) : i + ":00");
-            }
-
-            var min = Math.min.apply(null, vals);
-            var max = Math.max.apply(null, vals);
-            if (min === max) { min = 0; max += 10; }
-            min = Math.max(0, Math.floor(min * 0.9));
-            max = Math.ceil(max * 1.15);
-
-            var plotH = hgt - padT - padB;
-            var step = (w - padL - padR) / Math.max(1, vals.length - 1);
-            var pts = [];
-            for (var j = 0; j < vals.length; j++) {
-                var x = padL + j * step;
-                var normY = (vals[j] - min) / (max - min);
-                pts.push({ x: x, y: padT + plotH - normY * plotH, v: vals[j], t: times[j] });
-            }
-
-            var baseY = padT + plotH;
-            var line = 'M ' + pts[0].x + ' ' + pts[0].y;
-            for (var k = 1; k < pts.length; k++) line += ' L ' + pts[k].x + ' ' + pts[k].y;
-            var area = line + ' L ' + pts[pts.length - 1].x + ' ' + baseY + ' L ' + pts[0].x + ' ' + baseY + ' Z';
-
-            var rs = getComputedStyle(document.documentElement);
-            var cGrid = rs.getPropertyValue('--chart-grid').trim() || 'rgba(255,255,255,0.08)';
-            var cText = rs.getPropertyValue('--chart-text').trim() || '#94a3b8';
-            var cDot = rs.getPropertyValue('--chart-dot').trim() || '#060b11';
-            var col = currentMetric === 'temp' ? '#f59e0b' : (currentMetric === 'hum' ? '#06b6d4' : '#38bdf8');
-            var svgHtml = '<defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="' + col + '" stop-opacity="0.35"/><stop offset="100%" stop-color="' + col + '" stop-opacity="0"/></linearGradient></defs>';
-
-            for (var g = 0; g <= 2; g++) {
-                var gy = baseY - (g / 2) * plotH;
-                var gv = Math.round(min + (g / 2) * (max - min));
-                svgHtml += '<line x1="' + padL + '" y1="' + gy + '" x2="' + (w - padR) + '" y2="' + gy + '" stroke="' + cGrid + '" stroke-dasharray="3"/>';
-                svgHtml += '<text x="' + (padL - fs * 0.6) + '" y="' + (gy + fs * 0.35) + '" fill="' + cText + '" font-size="' + fs + '" text-anchor="end">' + gv + '</text>';
-            }
-
-            svgHtml += '<path d="' + area + '" fill="url(#cg)"/>';
-            svgHtml += '<path d="' + line + '" fill="none" stroke="' + col + '" stroke-width="' + Math.max(2, rem * 0.18) + '" stroke-linecap="round" stroke-linejoin="round"/>';
-
-            // ป้ายเวลา: เว้นระยะไม่ให้ซ้อนกัน (ปกติทุก 4 จุด, จอแคบจะห่างขึ้น)
-            var every = Math.max(4, Math.ceil((fs * 4.5) / step));
-            var lastLabelIdx = -999;
-            var dotR = Math.max(3, rem * 0.26);
-            for (var p = 0; p < pts.length; p++) {
-                var isLast = p === pts.length - 1;
-                if ((p % every === 0) || (isLast && (p - lastLabelIdx) * step >= fs * 4.5)) {
-                    lastLabelIdx = p;
-                    svgHtml += '<text x="' + pts[p].x + '" y="' + (hgt - fs * 0.35) + '" fill="' + cText + '" font-size="' + fs + '" text-anchor="middle">' + pts[p].t + '</text>';
-                }
-                svgHtml += '<circle cx="' + pts[p].x + '" cy="' + pts[p].y + '" r="' + dotR + '" fill="' + cDot + '" stroke="' + col + '" stroke-width="2" class="c-dot" data-val="' + pts[p].v + '" data-time="' + pts[p].t + '" data-x="' + pts[p].x + '" data-y="' + pts[p].y + '" style="cursor:pointer"/>';
-            }
-
-            svg.innerHTML = svgHtml;
-            attachTooltips();
-        }
-
-        function attachTooltips() {
-            var tip = document.getElementById('chart-tooltip');
-            var box = document.getElementById('chart-box');
-            var dots = document.querySelectorAll('.c-dot');
-
-            dots.forEach(function (d) {
-                function show() {
-                    var v = Number(d.getAttribute('data-val')).toFixed(1);
-                    var t = d.getAttribute('data-time');
-                    var unit = currentMetric === 'temp' ? '°C' : (currentMetric === 'hum' ? '%' : 'µg/m³');
-                    tip.innerText = t + ' น. • ' + v + ' ' + unit;
-
-                    // viewBox = px จริงของกล่อง จึงใช้พิกัดจุดได้ตรง ๆ และไม่ให้ล้นขอบ
-                    var cx = Number(d.getAttribute('data-x'));
-                    var cy = Number(d.getAttribute('data-y'));
-                    var left = Math.min(Math.max(0, cx - tip.offsetWidth / 2), box.clientWidth - tip.offsetWidth);
-                    var top = cy - tip.offsetHeight - 10;
-                    if (top < 0) top = cy + 14;
-
-                    tip.style.left = left + 'px';
-                    tip.style.top = top + 'px';
-                    tip.style.opacity = '1';
-                }
-                function hide() { tip.style.opacity = '0'; }
-
-                d.addEventListener('mouseenter', show);
-                d.addEventListener('mouseleave', hide);
-                d.addEventListener('touchstart', show);
-                d.addEventListener('touchend', hide);
-            });
+        // timestamp จาก API รูปแบบ "dd/mm/yyyy HH:MM:SS" (เวลาไทย) -> "อัปเดตล่าสุด dd/mm/yyyy HH:MM น."
+        function showUpdateTime(ts) {
+            var m = /^(\d\d)\/(\d\d)\/(\d{4}) (\d\d:\d\d)/.exec(ts || '');
+            if (!m) return;
+            document.getElementById('current-time').innerText =
+                'อัปเดตล่าสุด ' + m[1] + '/' + m[2] + '/' + m[3] + ' ' + m[4] + ' น.';
         }
 
         function readCache() {
@@ -658,9 +330,10 @@
             try { localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), d: d })); } catch (e) { }
         }
 
-        function fetchAirData(i) {
+        // done(ok) ถูกเรียกเมื่อดึงสำเร็จ หรือลองครบทุก URL แล้วไม่สำเร็จ
+        function fetchAirData(i, done) {
             i = i || 0;
-            if (i >= DATA_SOURCES.length) return;
+            if (i >= DATA_SOURCES.length) { if (done) done(false); return; }
             var xhr = new XMLHttpRequest();
             xhr.open('GET', DATA_SOURCES[i].url, true);
             xhr.timeout = 10000;
@@ -669,44 +342,134 @@
                 try {
                     if (xhr.status !== 200) throw new Error('HTTP ' + xhr.status);
                     var r = DATA_SOURCES[i].parse(xhr.responseText);
-                    if (r.status !== 'success') throw new Error('API status: ' + r.status);
-                    render(r.data);
-                    writeCache(r.data);
-                } catch (err) {
-                    fetchAirData(i + 1);
+                    if (r.status !== 'success') throw new Error('API status ' + r.status);
+                    renderUI(Number(r.data.aqi), Number(r.data.temp), r.data.timestamp);
+                    writeCache({ aqi: r.data.aqi, temp: r.data.temp, timestamp: r.data.timestamp });
+                    if (done) done(true);
+                } catch (e) {
+                    console.error(DATA_SOURCES[i].url, e);
+                    fetchAirData(i + 1, done);
                 }
             };
             xhr.send();
         }
 
-        function manualRefresh() {
-            fetchAirData(0);
+        // สีของอุณหภูมิ (°C) แยกจากสีของ AQI
+        function getTempColor(t) {
+            if (isNaN(t)) return "#95a5a6";
+            if (t < 20) return "#2D8CFF";   // เย็น
+            if (t < 28) return "#00B050";   // สบาย
+            if (t < 33) return "#F29900";   // อุ่น/ร้อน
+            if (t < 38) return "#FF5A00";   // ร้อนมาก
+            return "#E00000";               // ร้อนจัด
         }
 
-        function init() {
-            initScale();
-            var cached = readCache();
-            if (cached && (Date.now() - cached.t) < CACHE_TTL) {
-                render(cached.d);
+        // ชุดสี AQI 6 ระดับ สำหรับจอ Signage (max = ขอบบนของระดับ, ใช้เป็นตัวเลขบนแถบสเกลด้วย)
+        var AQI_LEVELS = [
+            { max: 50, color: "#20C982", text: "อากาศดี", type: 'happy', textOnColor: "white" },
+            { max: 100, color: "#F5C842", text: "อากาศปานกลาง", type: 'happy', textOnColor: "black" },
+            { max: 150, color: "#F08B3E", text: "เริ่มมีผลต่อกลุ่มเสี่ยง", type: 'sad', textOnColor: "white" },
+            { max: 200, color: "#EE4D5A", text: "มีผลต่อสุขภาพ", type: 'sad', textOnColor: "white" },
+            { max: 300, color: "#9561D1", text: "มีผลต่อสุขภาพอย่างมาก", type: 'sad', textOnColor: "white" },
+            { max: 500, color: "#8F3D58", text: "อันตราย", type: 'sad', textOnColor: "white" }
+        ];
+
+        function getAqiLevelIndex(aqi) {
+            for (var i = 0; i < AQI_LEVELS.length - 1; i++) {
+                if (aqi <= AQI_LEVELS[i].max) return i;
             }
-            fetchAirData(0);
-            setInterval(function () { fetchAirData(0); }, 5 * 60 * 1000);
-            setInterval(function () { location.replace(location.pathname + '?t=' + Date.now()); }, 3600000);
+            return AQI_LEVELS.length - 1;
         }
 
-        // วาดกราฟใหม่เมื่อกล่องกราฟเปลี่ยนขนาด (หมุนจอ / ย่อ-ขยายหน้าต่าง)
-        (function () {
-            var raf = 0;
-            function onResize() {
-                var box = document.getElementById('chart-box');
-                if (Math.round(box.clientWidth) + 'x' + Math.round(box.clientHeight) === lastChartSize) return;
-                cancelAnimationFrame(raf);
-                raf = requestAnimationFrame(renderChart);
+        // แถบสเกลทุกช่วงกว้างเท่ากัน ตำแหน่งตัวชี้คิดแบบเส้นตรงภายในแต่ละช่วง
+        function buildAqiScale() {
+            var scale = document.getElementById('aqi-scale');
+            var n = AQI_LEVELS.length;
+            var html = '<div class="scale-bar">';
+            for (var i = 0; i < n; i++) {
+                html += '<div class="scale-seg" style="background:' + AQI_LEVELS[i].color + '"></div>';
             }
-            if (window.ResizeObserver) new ResizeObserver(onResize).observe(document.getElementById('chart-box'));
-            window.addEventListener('resize', onResize);
-        })();
-        init();
+            html += '</div>';
+            for (var j = 0; j <= n; j++) {
+                var label = (j === 0) ? 0 : AQI_LEVELS[j - 1].max;
+                var align = (j === 0) ? 'transform:none;' : (j === n) ? 'transform:translateX(-100%);' : '';
+                html += '<div class="scale-tick" style="left:' + (j / n * 100) + '%;' + align + '">' + label + '</div>';
+            }
+            html += '<div class="scale-marker" id="scale-marker"></div>';
+            scale.innerHTML = html;
+        }
+
+        function updateAqiMarker(aqi) {
+            var i = getAqiLevelIndex(aqi);
+            var lo = i === 0 ? 0 : AQI_LEVELS[i - 1].max;
+            var frac = Math.min(Math.max((aqi - lo) / (AQI_LEVELS[i].max - lo), 0), 1);
+            document.getElementById('scale-marker').style.left = ((i + frac) / AQI_LEVELS.length * 100) + '%';
+        }
+
+        function renderUI(aqi, temp, ts) {
+            if (isNaN(aqi)) return;
+            showUpdateTime(ts);
+            var level = AQI_LEVELS[getAqiLevelIndex(aqi)];
+            var color = level.color, text = level.text, type = level.type, textOnColor = level.textOnColor;
+            updateAqiMarker(aqi);
+
+            // อัปเดต UI
+            const aqiVal = document.getElementById('aqi-value');
+            const tempVal = document.getElementById('temp-value');
+            const statusTxt = document.getElementById('status-text-large');
+            const labelTxt = document.querySelector('.aqi-label');
+
+            aqiVal.innerText = aqi;
+            // สำหรับสีเหลืองปรับสีตัวหนังสือให้เข้มเพื่อ Contrast
+            aqiVal.style.color = (color === "#F5C842") ? "#B8860B" : color;
+            tempVal.innerText = isNaN(temp) ? "--°C" : temp.toFixed(1) + "°C";
+            var tempColor = getTempColor(temp);
+            tempVal.style.color = tempColor;
+
+            document.getElementById('bottom-bar').style.background = color;
+
+            statusTxt.innerText = text;
+            statusTxt.style.color = textOnColor;
+
+            document.getElementById('status-icon').innerHTML = getAqiIcon(color, type);
+            document.getElementById('weather-icon-box').innerHTML = getThermometerIcon(tempColor);
+            if (labelTxt) labelTxt.style.color = (color === "#F5C842") ? "#B8860B" : color;
+        }
+
+        // "dd/mm/yyyy HH:MM:SS" (เวลาไทย) -> epoch ms
+        function tsToEpoch(ts) {
+            var m = /^(\d\d)\/(\d\d)\/(\d{4}) (\d\d):(\d\d):(\d\d)/.exec(ts || '');
+            return m ? Date.UTC(+m[3], +m[2] - 1, +m[1], +m[4] - 7, +m[5], +m[6]) : NaN;
+        }
+
+        // ข้อมูลออกทุกต้นชั่วโมง: นัดเช็คที่ hh:05:00 แล้วถ้าข้อมูลยังเป็นของชั่วโมงก่อนให้เช็คทุก 20 วินาทีจนกว่าจะมาใหม่
+        function nextDelay(ts) {
+            var now = Date.now();
+            var hourStart = Math.floor((now + TZ_MS) / HOUR_MS) * HOUR_MS - TZ_MS;
+            var since = now - hourStart;
+            if (since < FAST_WINDOW_MS && tsToEpoch(ts) < hourStart) return Math.max(WAIT_MS, START_MS - since);
+            return Math.min(CACHE_TTL, hourStart + HOUR_MS + START_MS - now);
+        }
+
+        // แคชใน localStorage: ถ้ายังสดใช้ค่าในแคชเลย ไม่ยิง API แล้วนัดเช็คใหม่ตอนแคชหมดอายุ
+        function refresh() {
+            var c = readCache(), age = c ? Date.now() - c.t : Infinity;
+            var wait = c ? nextDelay(c.d.timestamp) : 0;
+            if (age >= 0 && age < wait) {
+                renderUI(Number(c.d.aqi), Number(c.d.temp), c.d.timestamp);
+                setTimeout(refresh, wait - age + 1000);
+            } else {
+                fetchAirData(0, function (ok) {
+                    var fresh = ok && readCache();
+                    setTimeout(refresh, fresh ? nextDelay(fresh.d.timestamp) : RETRY_MS);
+                });
+            }
+        }
+
+        buildAqiScale();
+        refresh();
+        // โหลดหน้าใหม่ทุกชั่วโมงเพื่อรับโค้ดเวอร์ชันล่าสุด (?t= กันแคช)
+        setInterval(function () { location.replace(location.pathname + '?t=' + Date.now()); }, 3600000);
     </script>
 </body>
 
