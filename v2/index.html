@@ -221,6 +221,8 @@
             transition: all 0.2s;
         }
 
+        a.btn-refresh { text-decoration: none; }
+
         .btn-refresh:hover {
             background: var(--glass-hover);
             border-color: var(--border-card-hover);
@@ -1021,6 +1023,7 @@
             <div class="header-meta">
                 <span><span class="live-dot"></span> สด</span>
                 <span id="txt-updated">อัปเดตล่าสุด --/--/---- --:--</span>
+                <a class="btn-refresh" href="../" aria-label="กลับหน้าแรก" title="กลับหน้าแรก"><i class="fa-solid fa-house"></i> <span class="btn-text">หน้าแรก</span></a>
                 <button class="btn-refresh" id="btn-theme" onclick="toggleTheme()" aria-label="สลับธีมสว่าง/มืด" title="สลับธีมสว่าง/มืด">
                     <i class="fa-solid fa-sun" id="theme-icon"></i> <span id="theme-label" class="btn-text">สว่าง</span>
                 </button>
