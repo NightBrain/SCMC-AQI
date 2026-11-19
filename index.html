@@ -3,1256 +3,344 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCMC - Air Quality</title>
     <link rel="icon" type="image/png"
-        href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAAAXNSR0IArs4c6QAAAHhlWElmTU0AKgAAAAgABAEaAAUAAAABAAAAPgEbAAUAAAABAAAARgEoAAMAAAABAAIAAIdpAAQAAAABAAAATgAAAAAAAABIAAAAAQAAAEgAAAABAAOgAQADAAAAAQABAACgAgAEAAAAAQAAAICgAwAEAAAAAQAAAIAAAAAAewEwQAAAAAlwSFlzAAALEwAACxMBAJqcGAAAHcZJREFUeAHtXQt0VdWZ/s8595EQQpBHiOEVAgIqIBAQRHyMVsRXtZAEhbGdhdM80FWrxbKmL+m0s6a2VOuMkpCprtVSUJJIdbT1bR1RRAnhKQJCCK8IISAhQHIf55z5/nNzw01yc3Ne9+aGZK+VnHPP2c//+/e///3vf+8jUA8Ly5eXug4caHI6nSmiIHic3HxVdft8vnqlqSnBV1aW6+1JJBEutcYuXfp2UkNDQ7rDIWaoqpqpkMrXYSJRqkrUH+3tKwiUqKqCA9BrDEAk+ARB9asqNeL9OcQ7g2utIAhHRRKqca3y+5Xq5OTkmhUrbj9/KdGs2zPAo4++PsLr9U4mkWaSok4lQR0LQNMEQUwURQcBbPRw/lOAm4orfjSH4D0Abn4iaPGRHldA35xWUfycHsyhHidV2EeiUEkKbXK5XNueffaew8H8uuM12PJuU/e8vNf7SFJTFio8ByDdDBAnipIjRRRFUhQGWGaw8HcRaDsax0wSYAqJRFFAWQopsr8ez3eivA9RxjuynLClpOSeC3aUF6s8ugUD5OWtckrSgJlE4jz0wjvQQcc5HK4ACFrvtBdsvcRnpmApw8zn93tZbuwB371FpKyX5dObSkryfXrz6qp4cc0AS5a8OlwV/DkQuwshvadKDqfA4lhR5K6iV8RyRZGlg4Nkv08FN1RiOForqI6ylSvvOxIxYRe+jEsGKCgon4JxNh+Vmy9JzkEs1mXZ34VkMl60JLH+IaHevjrIp1egn6wqLs7eajyn6KaIKwYoLHxlJnrOD9Hk+wC8G8TTxvPokiC6ubPedLE870P">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Font Awesome 6 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-    <script>
-        // ตั้งธีมก่อนวาดหน้า กันภาพกะพริบ (ค่าเริ่มต้น = มืด)
-        try {
-            document.documentElement.setAttribute('data-theme', localStorage.getItem('scmc-theme') === 'light' ? 'light' : 'dark');
-        } catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
-    </script>
-
+        href="data:image/png;base64,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">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* ==========================================================
-           Fluid scaling: ทุกขนาดอ้างอิง rem เดียว แล้วให้ rem ปรับตามจอ
-           (เลือกค่าที่น้อยกว่าระหว่างความกว้าง/ความสูง จึงพอดีทั้งจอ
-           16:9, 16:10, 4:3 และทีวี) ออกแบบไว้ที่ราว 95rem x 54rem
-           ========================================================== */
-        :root {
-            --font-main: 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif;
-            --theme-color: #10b981;
-            color-scheme: dark;
-            --bg-page: #060b11;
-            --bg-card: rgba(16, 25, 38, 0.88);
-            --bg-card-sub: rgba(255, 255, 255, 0.04);
-            --border-card: rgba(255, 255, 255, 0.08);
-            --border-card-hover: rgba(255, 255, 255, 0.18);
-            --text-1: #ffffff;
-            --text-2: #a3b1c6;
-            --text-3: #64748b;
-            --glass-1: rgba(255, 255, 255, 0.08);
-            --glass-2: rgba(255, 255, 255, 0.12);
-            --glass-hover: rgba(255, 255, 255, 0.1);
-            --pill-bg: rgba(255, 255, 255, 0.05);
-            --tabs-bg: rgba(0, 0, 0, 0.35);
-            --pin-bg: #ffffff;
-            --pin-border: #000000;
-            --shadow: rgba(0, 0, 0, 0.55);
-            --num-shadow: rgba(0, 0, 0, 0.6);
-            --bg-glow: var(--theme-color);
-            --bg-glow-2: rgba(56, 189, 248, 0.08);
-            --bg-mid: #0c1624;
-            --bg-edge: #060b11;
-            --theme-text: var(--theme-color);
-            --chart-grid: rgba(255, 255, 255, 0.08);
-            --chart-text: #94a3b8;
-            --chart-dot: #060b11;
-            --radius: 2rem;
-            --radius-sm: 1.9rem;
-            --gap: 0.9rem;
-        }
-
-        /* ---------- ธีมสว่าง ---------- */
-        html[data-theme="light"] {
-            color-scheme: light;
-            --bg-page: #eaf0f6;
-            --bg-card: rgba(255, 255, 255, 0.9);
-            --bg-card-sub: rgba(15, 23, 42, 0.04);
-            --border-card: rgba(15, 23, 42, 0.1);
-            --border-card-hover: rgba(15, 23, 42, 0.24);
-            --text-1: #0f172a;
-            --text-2: #475569;
-            --text-3: #64748b;
-            --glass-1: rgba(15, 23, 42, 0.09);
-            --glass-2: rgba(15, 23, 42, 0.12);
-            --glass-hover: rgba(15, 23, 42, 0.08);
-            --pill-bg: rgba(15, 23, 42, 0.05);
-            --tabs-bg: rgba(15, 23, 42, 0.08);
-            --pin-bg: #0f172a;
-            --pin-border: #ffffff;
-            --shadow: rgba(15, 23, 42, 0.14);
-            --num-shadow: rgba(255, 255, 255, 0.7);
-            --bg-glow: color-mix(in srgb, var(--theme-color) 32%, transparent);
-            --bg-glow-2: rgba(56, 189, 248, 0.16);
-            --bg-mid: #f8fafc;
-            --bg-edge: #e3ebf3;
-            --theme-text: color-mix(in srgb, var(--theme-color) 62%, #0f172a);
-            --chart-grid: rgba(15, 23, 42, 0.1);
-            --chart-text: #64748b;
-            --chart-dot: #ffffff;
-        }
-
-        html {
-            font-size: 14px;
-            font-size: clamp(12px, min(1.15vw, 2.1vh), 28px);
-            -webkit-text-size-adjust: 100%;
-        }
-
         * {
+            -webkit-box-sizing: border-box;
             box-sizing: border-box;
+            font-family: 'Prompt', sans-serif;
+        }
+
+        body,
+        html {
             margin: 0;
             padding: 0;
-            font-family: var(--font-main);
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html, body {
             width: 100%;
             height: 100%;
-            min-height: 100dvh;
-            background-color: var(--bg-page);
-            color: var(--text-1);
-            overflow: hidden;
-            background-image:
-                radial-gradient(circle at 15% 10%, var(--bg-glow) 0%, transparent 40%),
-                radial-gradient(circle at 85% 85%, var(--bg-glow-2) 0%, transparent 45%),
-                radial-gradient(circle at 50% 50%, var(--bg-mid) 0%, var(--bg-edge) 100%);
-            background-repeat: no-repeat;
-            background-size: 100% 100%;
-            transition: background-image 0.8s ease;
-        }
-
-        /* Fullscreen Layout Wrapper */
-        .app-wrapper {
-            width: 100%;
-            height: 100dvh;
-            display: flex;
-            flex-direction: column;
-            padding: 0.7rem 1.1rem 0.8rem;
-            gap: 0.6rem;
-        }
-
-        /* ---------- Header (ข้อมูลรอง: เล็กสุดของหน้า) ---------- */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0;
-            gap: 1rem;
-            border-bottom: 1px solid var(--border-card);
-            padding-bottom: 0.5rem;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 0.7rem;
-            min-width: 0;
-        }
-
-        .brand-badge {
-            background: var(--theme-color);
-            color: #000;
-            font-weight: 900;
-            font-size: 1.1rem;
-            padding: 0.2rem 0.6rem;
-            border-radius: 999px;
-            transition: background 0.8s;
-            box-shadow: 0 0 14px var(--theme-color);
-            white-space: nowrap;
-        }
-
-        .brand-title {
-            font-size: 1.65rem;
-            font-weight: 800;
-            letter-spacing: -0.01em;
-            display: flex;
-            align-items: baseline;
-            flex-wrap: wrap;
-            column-gap: 0.5rem;
-        }
-
-        .brand-sub {
-            font-size: 1.05rem;
-            color: var(--text-1);
-            font-weight: 600;
-            white-space: nowrap;
-            padding: 0.1rem 0.8rem;
-            border-radius: 999px;
-            background: var(--glass-1);
-            border: 1px solid var(--border-card-hover);
-        }
-
-        .header-meta {
-            display: flex;
-            align-items: center;
-            gap: 0.9rem;
-            font-size: 1.05rem;
-            color: var(--text-2);
-            flex-shrink: 0;
-            white-space: nowrap;
-        }
-
-        .live-dot {
-            width: 0.6rem;
-            height: 0.6rem;
-            border-radius: 50%;
-            background: var(--theme-color);
-            display: inline-block;
-            box-shadow: 0 0 10px var(--theme-color);
-            animation: pulse-dot 2s infinite ease-in-out;
-        }
-
-        @keyframes pulse-dot {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.3); opacity: 0.7; }
-        }
-
-        .btn-refresh {
-            background: var(--bg-card-sub);
-            border: 1px solid var(--border-card);
-            color: var(--text-1);
-            padding: 0.35rem 0.8rem;
-            border-radius: 999px;
-            font-size: 1rem;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            transition: all 0.2s;
-        }
-
-        a.btn-refresh { text-decoration: none; }
-
-        .btn-refresh:hover {
-            background: var(--glass-hover);
-            border-color: var(--border-card-hover);
-        }
-
-        /* ---------- Main: 2 คอลัมน์ ---------- */
-        .main-layout {
-            flex: 1;
-            display: grid;
-            grid-template-columns: minmax(0, 40fr) minmax(0, 60fr);
-            gap: 0.9rem;
-            min-height: 0;
-            overflow: hidden;
-        }
-
-        .glass-panel {
-            background: var(--bg-card);
-            border: 1px solid var(--border-card);
-            border-radius: 2.8rem;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 12px 35px -8px var(--shadow);
-            display: flex;
-            flex-direction: column;
+            background-color: #F3F3F3;
             overflow: hidden;
             position: relative;
-            min-width: 0;
         }
 
-        /* ---------- LEFT: Hero (สำคัญที่สุด) ---------- */
-        .hero-panel {
-            padding: 1.4rem 1.7rem 1.3rem;
-            gap: 0.9rem;
-            justify-content: space-between;
-            container-type: size;
-        }
-
-        .hero-panel::before {
-            content: '';
+        #bottom-bar {
+            width: 100%;
+            height: 65%;
             position: absolute;
-            top: 0;
+            top: 35%;
             left: 0;
-            right: 0;
-            height: 5px;
-            background: var(--theme-color);
-            transition: background 0.8s;
-            box-shadow: 0 0 16px var(--theme-color);
+            background: #95a5a6;
+            -webkit-transition: background 0.8s ease-in-out;
+            transition: background 0.8s ease-in-out;
+            z-index: 1;
         }
 
-        .hero-top-row {
+        .screen-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header-text {
+            position: absolute;
+            width: 100%;
+            top: 3vh;
+            text-align: center;
+            color: black;
+            font-size: 13vh;
+            font-weight: 700;
+        }
+
+        .main-card {
+            width: 86%;
+            height: 42vh;
+            left: 7%;
+            top: 27vh;
+            position: absolute;
+            background: white;
+            border-radius: 9vh;
+            z-index: 20;
+            -webkit-box-shadow: 0px 4px 100px rgba(0, 0, 0, 0.25);
+            display: -webkit-flex;
             display: flex;
-            justify-content: space-between;
+            -webkit-align-items: center;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 0.6rem;
         }
 
-        .hero-label {
-            font-size: 1.1rem;
-            color: var(--text-2);
-            font-weight: 600;
-        }
-
-        .hero-status-pill {
-            font-size: 1.9rem;
-            font-weight: 800;
-            line-height: 1.2;
-            color: var(--theme-text);
-            background: var(--pill-bg);
-            padding: 0.3rem 1.1rem;
-            border-radius: 50px;
-            border: 1px solid var(--glass-2);
-            box-shadow: 0 0 16px var(--shadow);
-        }
-
-        /* หน้ายิ้มอยู่เหนือเลข AQI คนละบรรทัด และใช้ขนาดเดียวกัน (--aqi-size)
-           หน้ายิ้มสูงเท่าตัวเลข (ตัวเลขฟอนต์ Prompt 900 สูง 0.714 ของขนาดฟอนต์)
-           ขนาดคำนวณจากทั้งความกว้างและความสูงที่ว่างจริงของการ์ด */
-        .hero-center {
-            --aqi-size: max(6rem, min(22rem, var(--aqi-w, 44cqw), calc((100cqh - 22.5rem) / 1.65)));
+        .aqi-section {
+            -webkit-flex: 2;
+            flex: 2;
+            display: -webkit-flex;
             display: flex;
+            -webkit-flex-direction: column;
             flex-direction: column;
-            align-items: center;
+            -webkit-justify-content: center;
             justify-content: center;
-            gap: calc(var(--aqi-size) * 0.06);
-            flex: 1;
-            min-height: 0;
-        }
-
-        .hero-mascot-box {
-            width: calc(var(--aqi-size) * 0.72);
-            height: calc(var(--aqi-size) * 0.72);
-            flex-shrink: 0;
-            animation: mascot-float 3.5s ease-in-out infinite;
-        }
-
-        @keyframes mascot-float {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-8px) scale(1.03); }
-        }
-
-        .hero-val-group {
-            display: flex;
-            flex-direction: column;
+            -webkit-align-items: center;
             align-items: center;
-            min-width: 0;
+            padding-left: 2vh;
         }
 
-        .hero-aqi-num {
-            font-size: var(--aqi-size);
-            font-weight: 900;
-            line-height: 0.8;
-            color: var(--theme-text);
-            letter-spacing: 0.05em;
-            margin-right: -0.05em; /* หักระยะท้ายตัวเลขออก ให้คู่หน้ายิ้ม+เลขอยู่กึ่งกลางพอดี */
-            transition: color 0.8s ease;
-            text-shadow: 0 0 40px var(--num-shadow);
-        }
-
-        .hero-aqi-sub {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--text-2);
-            margin-top: 0.5rem;
-        }
-
-        /* 3 คำแนะนำ: ข้อมูลที่คนทั่วไปอยากรู้ที่สุดรองจาก AQI */
-        .hero-actions {
+        .aqi-row {
+            display: -webkit-flex;
             display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .act-item {
-            display: flex;
+            -webkit-align-items: center;
             align-items: center;
-            justify-content: space-between;
-            gap: 0.6rem;
-            background: var(--bg-card-sub);
-            border: 1px solid var(--border-card);
-            padding: 0.6rem 1.3rem;
-            border-radius: var(--radius-sm);
-            transition: transform 0.2s, border-color 0.2s;
         }
 
-        .act-item:hover {
-            border-color: var(--border-card-hover);
-            transform: translateX(4px);
-        }
-
-        .act-left {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            font-size: 1.15rem;
-            color: var(--text-2);
-            font-weight: 500;
-            min-width: 0;
-        }
-
-        .act-icon-wrap {
-            width: 2.7rem;
-            height: 2.7rem;
-            border-radius: 1.2rem;
-            background: var(--glass-1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            color: #38bdf8;
-            flex-shrink: 0;
-        }
-
-        .act-right {
-            font-size: 1.45rem;
-            font-weight: 800;
-            color: var(--text-1);
-            text-align: right;
-        }
-
-        /* Spectrum Bar */
-        .scale-box {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            flex-shrink: 0;
+        .aqi-scale {
+            position: relative;
+            width: 80vh;
+            margin-top: 2vh;
+            padding-bottom: 3.5vh;
         }
 
         .scale-bar {
-            height: 0.8rem;
-            border-radius: 999px;
+            display: -webkit-flex;
             display: flex;
-            gap: 4px;
-            position: relative;
-            background: var(--glass-1);
+            height: 1.8vh;
         }
 
         .scale-seg {
+            -webkit-flex: 1;
             flex: 1;
-            height: 100%;
-            border-radius: 999px;
+            margin-left: 0.6vh;
         }
 
-        .scale-pin {
+        .scale-seg:first-child {
+            margin-left: 0;
+            border-radius: 1vh 0 0 1vh;
+        }
+
+        .scale-seg:last-child {
+            border-radius: 0 1vh 1vh 0;
+        }
+
+        .scale-tick {
             position: absolute;
-            top: -0.25rem;
-            width: 0.8rem;
-            height: calc(100% + 0.5rem);
-            background: var(--pin-bg);
-            border-radius: 999px;
+            top: 3vh;
+            font-size: 2.2vh;
+            line-height: 1;
+            color: #7a8a92;
+            -webkit-transform: translateX(-50%);
             transform: translateX(-50%);
-            box-shadow: 0 0 12px var(--shadow);
-            border: 2px solid var(--pin-border);
-            transition: left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .scale-labels {
-            display: flex;
-            gap: 4px;
-            color: var(--text-2);
-            font-size: 0.9rem;
-            font-weight: 600;
-            line-height: 1.25;
-        }
-
-        .scale-labels span {
-            flex: 1;
-            min-width: 0;
-            text-align: center;
-        }
-
-        .scale-labels b {
-            display: block;
-            color: var(--text-1);
-            font-weight: 800;
-        }
-
-        /* ---------- RIGHT ---------- */
-        .right-layout {
-            display: flex;
-            flex-direction: column;
-            gap: 0.6rem;
-            min-height: 0;
-            min-width: 0;
-            overflow: hidden;
-        }
-
-        .section-label {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--text-2);
-            letter-spacing: 0.03em;
-            margin-bottom: 0.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        /* 70% เนื้อหา (มลพิษ + สภาพอากาศ) / 30% กราฟ */
-        .right-top {
-            flex: 0 0 calc(70% - 0.42rem); /* 70% พอดี หักส่วนของช่องว่างระหว่างบล็อกแล้ว */
-            min-height: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-        }
-
-        .section-wrap {
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-            min-height: 0;
-        }
-
-        .right-top > .section-wrap:nth-child(1) { flex: 3 1 0; }
-        .right-top > .section-wrap:nth-child(2) { flex: 2 1 0; }
-
-        /* 5 มลพิษ */
-        .pollutants-grid {
-            display: grid;
-            grid-template-columns: repeat(5, minmax(0, 1fr));
-            grid-template-rows: minmax(0, 1fr);
-            gap: 0.6rem;
-            flex: 1;
-            min-height: 0;
-        }
-
-        .stat-card, .weather-card { --cx: var(--c, #fff); }
-        html[data-theme="light"] .stat-badge { --bc-text: color-mix(in srgb, var(--bc, #475569) 58%, #0f172a); }
-        html[data-theme="light"] .act-icon-wrap { filter: brightness(0.78) saturate(1.2); }
-        html[data-theme="light"] .stat-card,
-        html[data-theme="light"] .weather-card { --cx: color-mix(in srgb, var(--c, #0f172a) 60%, #0f172a); }
-
-        .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-card);
-            border-radius: var(--radius-sm);
-            padding: 0.85rem 1rem 0.95rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.35rem;
-            overflow: hidden;
-            min-width: 0;
-            container-type: inline-size;
-            transition: border-color 0.2s, transform 0.2s;
-        }
-
-        .stat-card:hover {
-            border-color: var(--border-card-hover);
-            transform: translateY(-2px);
-        }
-
-        .stat-top {
-            display: flex;
-            align-items: center;
-            min-width: 0;
-        }
-
-        .stat-name-box {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            min-width: 0;
-            width: 100%;
-        }
-
-        /* ไอคอนในวงกลม เหมือนการ์ดสภาพอากาศ */
-        .stat-chip {
-            width: 2.6rem;
-            width: min(2.8rem, 28cqw);
-            height: 2.6rem;
-            height: min(2.8rem, 28cqw);
-            border-radius: 50%;
-            background: var(--bg-card-sub);
-            border: 1px solid var(--border-card);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            background: color-mix(in srgb, var(--c, #fff) 16%, transparent);
-            border-color: color-mix(in srgb, var(--c, #fff) 38%, transparent);
-        }
-
-        .stat-name-text {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            min-width: 0;
-            line-height: 1.15;
-        }
-
-        .stat-name-text b {
-            font-size: 1.15rem;
-            font-size: min(1.6rem, 17cqw);
-            font-weight: 800;
-            color: var(--text-1);
-            white-space: nowrap;
-        }
-
-        .stat-name-text small {
-            font-size: 0.85rem;
-            font-size: min(1.1rem, 12.5cqw);
-            font-weight: 600;
-            color: var(--text-2);
-            white-space: nowrap;
-        }
-
-        .stat-fa-icon {
-            color: var(--cx);
-            font-size: 1.2rem;
-            font-size: min(1.45rem, 14cqw);
-        }
-
-        /* ตัวเลขอยู่กึ่งกลางพื้นที่ว่างระหว่างหัวการ์ดกับส่วนสถานะ */
-        .stat-val-group {
-            display: flex;
-            align-items: flex-start;
-            flex-direction: column;
-            gap: 0;
-            white-space: nowrap;
-            margin: auto 0;
-        }
-
-        .stat-val {
-            font-size: 2.6rem;
-            font-size: min(5.2rem, 7.5vh, calc(100cqw / var(--w, 2.4)));
-            font-weight: 900;
-            line-height: 1.05;
-            color: var(--cx);
-        }
-
-        .stat-unit {
-            font-size: 0.9rem;
-            font-size: min(1.15rem, 13cqw);
-            color: var(--text-2);
-        }
-
-        .stat-status-row {
-            display: flex;
-            align-items: center;
-            min-width: 0;
-        }
-
-        .stat-badge {
-            --bc-text: var(--bc, var(--text-2));
-            color: var(--bc-text);
-            font-size: 0.95rem;
-            font-size: min(1.15rem, 13cqw);
-            font-weight: 800;
-            padding: 0.15rem 0.75rem;
-            border-radius: 999px;
-            white-space: nowrap;
-        }
-
-        .stat-desc {
-            font-size: 0.9rem;
-            font-size: min(1.15rem, 12cqw);
-            color: var(--text-2);
-            white-space: normal;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            min-width: 0;
-            line-height: 1.3;
-        }
-
-        .stat-status-row {
-            flex-wrap: wrap;
-            gap: 0.15rem 0.4rem;
-        }
-
-        .stat-status-row .stat-desc {
-            flex: 1 0 100%;
-        }
-
-        .stat-badge {
-            flex-shrink: 0;
-        }
-
-        .stat-meter {
-            height: 8px;
-            background: var(--glass-1);
-            border-radius: 999px;
-            margin-top: 0.15rem;
-            overflow: hidden;
-        }
-
-        .stat-fill {
-            height: 100%;
-            border-radius: 999px;
-            transition: width 0.8s;
-        }
-
-        /* 4 สภาพอากาศ */
-        .weather-grid {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            grid-template-rows: minmax(0, 1fr);
-            gap: 0.6rem;
-            flex: 1;
-            min-height: 0;
-        }
-
-        .weather-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-card);
-            border-radius: var(--radius-sm);
-            padding: 0.8rem 1.2rem;
-            display: grid;
-            align-items: center;
-            gap: 0.8rem;
-            transition: border-color 0.2s;
-            overflow: hidden;
-            min-width: 0;
-            grid-template-columns: auto minmax(0, 1fr);
-            grid-template-rows: auto minmax(0, 1fr) auto;
-            grid-template-areas: "icon label" "val val" "hint hint";
-            column-gap: 0.7rem;
-            row-gap: 0.1rem;
-            container-type: size;
-        }
-
-        .weather-card:hover {
-            border-color: var(--border-card-hover);
-        }
-
-        .weather-icon-circle {
-            font-size: 1.4rem;
-            font-size: min(1.6rem, 10cqw);
-            width: 3rem;
-            width: min(3.2rem, 20cqw);
-            height: 3rem;
-            height: min(3.2rem, 20cqw);
-            border-radius: 1.6rem;
-            background: color-mix(in srgb, var(--c, #fff) 16%, transparent);
-            border: 1px solid color-mix(in srgb, var(--c, #fff) 38%, transparent);
-            color: var(--cx);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            grid-area: icon;
-        }
-
-        .weather-info {
-            display: contents;
-        }
-
-        .weather-label {
-            font-size: 1.05rem;
-            font-size: min(1.4rem, 10cqw);
-            color: var(--text-2);
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            grid-area: label;
-        }
-
-        .weather-val-box {
-            font-size: 2.4rem;
-            font-size: max(1.6rem, min(5.2rem,
-                calc(100cqw / var(--ww, 4)),
-                calc((100cqh - min(3.2rem, 20cqw) - min(1.3rem, 9cqw) * 1.5 - 0.5rem) / 1.15)));
-            font-weight: 800;
-            color: var(--cx);
-            line-height: 1.15;
-            white-space: nowrap;
-            grid-area: val;
-            align-self: center;
-        }
-
-        .weather-hint {
-            font-size: 0.95rem;
-            font-size: min(1.3rem, 9cqw);
-            color: var(--text-2);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            grid-area: hint;
-        }
-
-        /* กราฟ 24 ชม. กินพื้นที่ที่เหลือทั้งหมด */
-        .trend-panel {
-            background: var(--bg-card);
-            border: 1px solid var(--border-card);
-            border-radius: var(--radius-sm);
-            padding: 0.75rem 1.6rem 0.65rem;
-            display: flex;
-            flex-direction: column;
-            flex: 1 1 0;
-            min-height: 0;
-            min-width: 0;
-            overflow: hidden;
-        }
-
-        .trend-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 0.6rem;
-            margin-bottom: 0.4rem;
-            flex-shrink: 0;
-        }
-
-        .trend-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--text-1);
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        .tab-btn-group {
-            display: flex;
-            gap: 4px;
-            background: var(--tabs-bg);
-            padding: 2px;
-            border-radius: 999px;
-            flex-shrink: 0;
-        }
-
-        .tab-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-2);
-            padding: 0.2rem 0.65rem;
-            border-radius: 999px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .tab-btn.active {
-            background: var(--glass-2);
-            color: var(--text-1);
-        }
-
-        .chart-box {
-            flex: 1;
-            width: 100%;
-            position: relative;
-            min-height: 0;
-            overflow: hidden;
-        }
-
-        /* svg ลอยเต็มกล่อง ไม่ดันขนาดกล่อง และ viewBox = ขนาดจริง ตัวอักษรจึงไม่เพี้ยน */
-        .chart-svg {
+        .scale-marker {
             position: absolute;
-            top: 0;
+            top: -0.9vh;
+            width: 0.9vh;
+            height: 3.6vh;
+            margin-left: -0.45vh;
+            border-radius: 0.45vh;
+            background: #17394a;
+            border: 0.25vh solid white;
+            -webkit-box-sizing: content-box;
+            box-sizing: content-box;
             left: 0;
-            width: 100%;
-            height: 100%;
+            transition: left 0.8s ease-in-out;
+        }
+
+        #status-icon {
+            width: 19vh;
+            height: 19vh;
+            margin-right: 5vh;
+            -webkit-animation: floating 1.5s ease-in-out infinite;
+        }
+
+        #aqi-value {
+            font-size: 24vh;
+            font-weight: 700;
+            color: #95a5a6;
+            line-height: 1;
+            transition: color 0.8s;
+        }
+
+        .aqi-label {
+            font-size: 3.5vh;
+            font-weight: 700;
+            color: #95a5a6;
+            margin-top: -1vh;
+            text-align: center;
+            transition: color 0.8s;
+        }
+
+        .divider {
+            width: 5px;
+            height: 30vh;
+            background: #95a5a6;
+            opacity: 0.5;
+            transition: background 0.8s;
+        }
+
+        .temp-section {
+            -webkit-flex: 1;
+            flex: 1;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-align-items: center;
+            align-items: center;
+        }
+
+        #weather-icon-box {
+            width: 8vh;
+            height: 20vh;
+            margin-right: 5vh;
+            display: block;
             overflow: visible;
         }
 
-        .chart-tooltip {
-            position: absolute;
-            background: rgba(15, 23, 42, 0.95);
-            border: 1px solid var(--border-card-hover);
-            color: #fff;
-            padding: 0.2rem 0.6rem;
-            border-radius: 999px;
-            font-size: 1rem;
+        #temp-value {
+            font-size: 10vh;
             font-weight: 700;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.15s;
-            z-index: 10;
-            white-space: nowrap;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            color: #95a5a6;
+            transition: color 0.8s;
         }
 
-        /* FONT AWESOME ANIMATIONS */
-        .anim-run {
-            animation: anim-runner 1.8s infinite ease-in-out;
-            display: inline-block;
-        }
-        @keyframes anim-runner {
-            0%, 100% { transform: translateX(0) skewX(0); }
-            50% { transform: translateX(4px) skewX(-10deg); }
-        }
-
-        .anim-pulse {
-            animation: anim-pulsing 2s infinite ease-in-out;
-            display: inline-block;
-        }
-        @keyframes anim-pulsing {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.15); }
+        #status-text-large {
+            position: absolute;
+            width: 100%;
+            top: 72vh;
+            text-align: center;
+            color: white;
+            font-size: 13vh;
+            font-weight: 700;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            padding: 0 5%;
         }
 
-        .anim-wind {
-            animation: anim-blowing 2.2s infinite ease-in-out;
-            display: inline-block;
-        }
-        @keyframes anim-blowing {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(4px); }
-        }
-
-        .anim-spin-slow {
-            animation: anim-spinning 8s infinite linear;
-            display: inline-block;
-        }
-        @keyframes anim-spinning {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        .footer-info {
+            position: absolute;
+            width: 100%;
+            bottom: 3vh;
+            text-align: center;
+            color: white;
+            font-size: 3.5vh;
+            font-weight: 400;
         }
 
-        .anim-temp {
-            animation: anim-thermometer 2.5s infinite ease-in-out;
-            display: inline-block;
-        }
-        @keyframes anim-thermometer {
-            0%, 100% { transform: scaleY(1); }
-            50% { transform: scaleY(1.12); }
-        }
-
-        .anim-drop {
-            animation: anim-droplet 2s infinite ease-in-out;
-            display: inline-block;
-        }
-        @keyframes anim-droplet {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
-        }
-
-        /* ==========================================================
-           มือถือ / จอแนวตั้ง: เลื่อนดูได้ ตัวอักษรขนาดคงที่อ่านง่าย
-           ========================================================== */
-        @media (max-width: 950px), (orientation: portrait) {
-            .stat-val { font-size: min(5.2rem, calc(100cqw / var(--w, 2.4))); }
-            .weather-card { container-type: inline-size; }
-            .btn-refresh .btn-text { display: none; }
-            .btn-refresh { padding: 0.45rem 0.8rem; }
-            .weather-val-box { font-size: min(4.4rem, calc(100cqw / var(--ww, 4))); }
-
-            html {
-                font-size: 15px;
-                font-size: clamp(14px, 4vw, 18px);
+        @-webkit-keyframes floating {
+            0% {
+                -webkit-transform: translateY(0px);
             }
 
-            html, body {
-                overflow-y: auto;
-                height: auto;
+            50% {
+                -webkit-transform: translateY(-20px);
             }
 
-            .app-wrapper {
-                height: auto;
-                min-height: 100dvh;
-                padding: 0.9rem 0.9rem 2.2rem;
-                gap: 0.9rem;
+            100% {
+                -webkit-transform: translateY(0px);
             }
-
-            header {
-                flex-wrap: wrap;
-                gap: 0.5rem;
-            }
-
-            .brand-title { font-size: 1.15rem; }
-
-            .header-meta {
-                flex-shrink: 1;
-                flex-wrap: wrap;
-                white-space: normal;
-                gap: 0.4rem 0.8rem;
-                font-size: 0.9rem;
-            }
-
-            .main-layout {
-                display: flex;
-                flex-direction: column;
-                gap: 0.9rem;
-                overflow: visible;
-            }
-
-            .right-layout {
-                gap: 0.9rem;
-                overflow: visible;
-            }
-
-            .right-top {
-                flex: none;
-                gap: 0.9rem;
-            }
-
-            .right-top > .section-wrap:nth-child(1),
-            .right-top > .section-wrap:nth-child(2) { flex: none; }
-
-            .pollutants-grid, .weather-grid {
-                flex: none;
-                grid-template-rows: none;
-            }
-
-            .hero-panel { padding: 1.3rem 1.4rem 1.2rem; container-type: inline-size; }
-            .hero-status-pill { font-size: 1.35rem; }
-            .hero-center { padding: 0.4rem 0; }
-            .hero-val-group { align-items: flex-start; }
-            .hero-center { --aqi-size: min(9rem, var(--aqi-w-row, 33cqw)); flex-direction: row; gap: calc(var(--aqi-size) * 0.1); }
-            .act-left { font-size: 1rem; }
-            .act-right { font-size: 1.15rem; }
-            .scale-labels { font-size: 0.75rem; }
-
-            .pollutants-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                gap: 0.6rem;
-            }
-
-            .stat-card:last-child { grid-column: 1 / -1; }
-
-            .weather-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                gap: 0.6rem;
-            }
-
-            .trend-panel {
-                flex: none;
-                height: 16rem;
-            }
-
         }
 
-        /* ==========================================================
-           หน้าแรก: AQI + อุณหภูมิ
-           ========================================================== */
-        .home-layout {
-            flex: 1;
-            display: grid;
-            grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
-            gap: 0.9rem;
-            min-height: 0;
-            min-width: 0;
-        }
-
-        .home-layout .hero-panel { container-type: size; }
-
-        .home-layout .hero-center {
-            --aqi-size: max(6rem, min(34rem, var(--aqi-w, 44cqw), calc((100cqh - 9rem) / 1.65)));
-            flex-direction: column;
-            gap: calc(var(--aqi-size) * 0.06);
-        }
-
-        .home-layout .hero-label { font-size: min(1.8rem, 5cqw); }
-        .home-layout .hero-status-pill { font-size: min(2.6rem, 7cqw); }
-
-        .temp-panel {
-            --cx: var(--c);
-            padding: 1.4rem 1.7rem 1.3rem;
-            gap: 0.9rem;
-            justify-content: space-between;
-            container-type: size;
-        }
-
-        .temp-panel .hero-label { font-size: min(1.8rem, 8cqw); }
-        .temp-panel .temp-pill { color: var(--cx); font-size: min(1.8rem, 8cqw); }
-
-        html[data-theme="light"] .temp-panel { --cx: color-mix(in srgb, var(--c) 62%, #0f172a); }
-
-        .temp-center {
-            flex: 1;
-            min-height: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .temp-val {
-            font-size: max(3rem, min(18rem, 36cqw, calc((100cqh - 8rem) / 1.2)));
-            font-weight: 900;
-            line-height: 1;
-            color: var(--cx);
-            white-space: nowrap;
-            letter-spacing: 0.02em;
-        }
-
-        .temp-unit {
-            font-size: 0.45em;
-            font-weight: 800;
-            color: var(--text-2);
-            margin-left: 0.08em;
-            letter-spacing: 0;
-        }
-
-        .home-cta {
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            padding: 0.8rem 1.8rem;
+        /* ลิงก์ไปหน้ารายละเอียด */
+        .details-link {
+            position: absolute;
+            right: 3vh;
+            bottom: 2.4vh;
+            z-index: 30;
+            padding: 1vh 3vh;
             border-radius: 999px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-card-hover);
-            color: var(--text-1);
+            background: rgba(255, 255, 255, 0.25);
+            border: 0.3vh solid rgba(255, 255, 255, 0.8);
+            color: white;
+            font-size: 3vh;
+            font-weight: 700;
             text-decoration: none;
-            font-size: 1.4rem;
-            font-weight: 800;
-            transition: transform 0.2s, border-color 0.2s;
+            white-space: nowrap;
         }
 
-        .home-cta:hover { transform: translateY(-2px); border-color: var(--theme-color); }
-        .home-cta small { font-size: 0.7em; font-weight: 500; color: var(--text-2); margin-left: 0.6rem; }
-        .home-cta i { color: var(--theme-text); }
+        .details-link:hover { background: rgba(255, 255, 255, 0.4); }
 
-        @media (max-width: 950px), (orientation: portrait) {
-            html, body { overflow: hidden; height: 100%; }
-            .app-wrapper { height: 100dvh; min-height: 0; padding: 0.9rem 0.9rem 1rem; gap: 0.7rem; }
-            .home-layout { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1.35fr) minmax(0, 1fr); gap: 0.7rem; }
-            .home-layout .hero-panel { container-type: size; padding: 1.1rem 1.2rem; }
-            .home-layout .hero-center { flex-direction: column; padding: 0; --aqi-size: max(5rem, min(34rem, var(--aqi-w, 62cqw), calc((100cqh - 8rem) / 1.65))); gap: calc(var(--aqi-size) * 0.06); }
-            .home-layout .hero-val-group { align-items: center; }
-            .temp-panel { padding: 1.1rem 1.2rem; }
-            .home-cta { padding: 0.7rem 1.3rem; font-size: 1.1rem; }
-            .home-cta small { display: none; }
+        @media (max-aspect-ratio: 1/1) {
+            .details-link { font-size: 3.6vw; padding: 0.6vw 3vw; right: 2.5vw; top: 1vh; bottom: auto; background: rgba(0, 0, 0, 0.55); border-color: rgba(255, 255, 255, 0.9); }
         }
     </style>
 </head>
 
 <body>
-    <div class="app-wrapper">
-        <!-- Top Glance Header -->
-        <header>
-            <div class="brand">
-                <span class="brand-badge"><i class="fa-solid fa-wind anim-wind"></i> AQI</span>
-                <div>
-                    <h1 class="brand-title">SCMC Air Quality <span class="brand-sub"><i class="fa-solid fa-location-dot" style="color:var(--theme-text);"></i> สถานี ACAIR CMU</span></h1>
-                </div>
-            </div>
 
-            <div class="header-meta">
-                <span><span class="live-dot"></span> สด</span>
-                <span id="txt-updated">อัปเดตล่าสุด --/--/---- --:--</span>
-                <button class="btn-refresh" id="btn-theme" onclick="toggleTheme()" aria-label="สลับธีมสว่าง/มืด" title="สลับธีมสว่าง/มืด">
-                    <i class="fa-solid fa-sun" id="theme-icon"></i> <span id="theme-label" class="btn-text">สว่าง</span>
-                </button>
-                <button class="btn-refresh" onclick="manualRefresh()">
-                    <i class="fa-solid fa-rotate-right"></i> <span class="btn-text">รีเฟรช</span>
-                </button>
-            </div>
-        </header>
+    <div id="bottom-bar"></div>
 
-        <!-- หน้าแรก: AQI + อุณหภูมิ -->
-        <main class="home-layout">
-            <section class="glass-panel hero-panel">
-                <div class="hero-top-row">
-                    <span class="hero-label"><i class="fa-solid fa-chart-pie" style="color:var(--theme-color);"></i> ดัชนีคุณภาพอากาศ (AQI)</span>
-                    <span class="hero-status-pill" id="hero-status-pill">กำลังตรวจวัด...</span>
-                </div>
-                <div class="hero-center">
-                    <div class="hero-mascot-box" id="hero-mascot"></div>
-                    <div class="hero-val-group">
-                        <span class="hero-aqi-num" id="val-aqi">--</span>
+    <div class="screen-container">
+        <div class="header-text">คุณภาพอากาศวันนี้</div>
+
+        <div class="main-card">
+            <div class="aqi-section">
+                <div class="aqi-row">
+                    <div id="status-icon"></div>
+                    <div>
+                        <div id="aqi-value">--</div>
+                        <div class="aqi-label">AQI</div>
                     </div>
                 </div>
-            </section>
+                <div class="aqi-scale" id="aqi-scale"></div>
+            </div>
 
-            <section class="glass-panel temp-panel" style="--c:#fb923c">
-                <div class="hero-top-row">
-                    <span class="hero-label"><i class="fa-solid fa-temperature-half" style="color:var(--cx);"></i> อุณหภูมิ</span>
-                    <span class="hero-status-pill temp-pill" id="hint-temp">--</span>
-                </div>
-                <div class="temp-center">
-                    <div class="temp-val"><span id="val-temp">--</span><span class="temp-unit">°C</span></div>
-                </div>
-            </section>
-        </main>
+            <div id="mid-line" class="divider"></div>
 
-        <a class="home-cta" href="v2/">
-            <span>ดูรายละเอียดทั้งหมด <small>มลพิษ · ลม · ความชื้น · กราฟ 24 ชม.</small></span>
-            <i class="fa-solid fa-arrow-right"></i>
-        </a>
+            <div class="temp-section">
+                <div id="weather-icon-box"></div>
+                <div id="temp-value">--°C</div>
+            </div>
+        </div>
+
+        <div id="status-text-large">กำลังเชื่อมต่อ...</div>
+
+        <div class="footer-info">
+            <span id="station-name">ACAIR CMU</span> | <span id="current-time">อัปเดตล่าสุด --:--</span>
+        </div>
+        <a class="details-link" href="v2/">ดูรายละเอียด &rarr;</a>
     </div>
 
     <script>
+        // ดึงค่าสดจาก API ของ CMU ลองตามลำดับ ถ้าไม่ได้จะแสดง -- และลองใหม่
+        // API ของ CMU ไม่เปิด CORS เบราว์เซอร์เรียกตรงไม่ได้ จึงมี CORS proxy สาธารณะเป็นตัวสำรอง
+        // (ฟรี ไม่รับประกันว่าจะใช้ได้ตลอด ถ้าตัวไหนเลิกให้บริการจะข้ามไปตัวถัดไปเอง)
         var API_URL = 'https://dashboard.acair.cmu.ac.th/api/data?reslution=';
         var API_ENC = encodeURIComponent(API_URL);
+        // เรียงตามความเร็ว/เสถียรภาพที่ทดสอบได้ (allorigins ช้าและล่มบ่อย) เรียกตรงไว้ท้ายสุดเผื่อ CMU เปิด CORS ในอนาคต
         var DATA_SOURCES = [
             { url: 'https://r.jina.ai/' + API_URL, parse: function (t) { return JSON.parse(t.slice(t.indexOf('{', t.indexOf('Markdown Content:')))); } },
             { url: 'https://api.allorigins.win/raw?url=' + API_ENC, parse: JSON.parse },
             { url: 'https://api.allorigins.win/get?url=' + API_ENC, parse: function (t) { return JSON.parse(JSON.parse(t).contents); } },
             { url: API_URL, parse: JSON.parse }
         ];
+        var CACHE_KEY = 'aqi-cache';
+        var CACHE_TTL = 10 * 60 * 1000;  // เช็คค่าใหม่ทุก 10 นาที
+        var RETRY_MS = 60 * 1000;        // ดึงไม่สำเร็จ ลองใหม่ทุก 1 นาที
+        var WAIT_MS = 20 * 1000;         // รอข้อมูลชั่วโมงใหม่ เช็คทุก 20 วินาที
+        var START_MS = 5 * 60 * 1000;    // เริ่มเช็คชั่วโมงใหม่ที่ hh:05:00 (CMU ปล่อยค่าราว hh:03)
+        var HOUR_MS = 60 * 60 * 1000;
+        var TZ_MS = 7 * HOUR_MS;         // timestamp จาก API เป็นเวลาไทย (UTC+7)
+        var FAST_WINDOW_MS = 20 * 60 * 1000;  // ช่วงต้นชั่วโมงที่ถี่ขึ้นเพื่อรอข้อมูลใหม่
 
-        var CACHE_KEY = 'aqi-v2-cache';
-        var CACHE_TTL = 10 * 60 * 1000;
-        var currentData = null;
-
-        var TIERS = [
-            {
-                max: 25, color: "#10b981", text: "คุณภาพดีมาก",
-                outdoor: "ทำได้เต็มที่", mask: "ไม่ต้องใส่", window: "เปิดรับลมได้",
-                face: '<svg viewBox="0 0 80 80" width="100%" height="100%"><circle cx="40" cy="40" r="38" fill="#10b981"/><circle cx="28" cy="32" r="5" fill="#fff"/><circle cx="52" cy="32" r="5" fill="#fff"/><path d="M26 48 Q40 64 54 48" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/></svg>'
-            },
-            {
-                max: 50, color: "#34d399", text: "คุณภาพดี",
-                outdoor: "ทำได้ปกติ", mask: "ไม่ต้องใส่", window: "เปิดถ่ายเทได้",
-                face: '<svg viewBox="0 0 80 80" width="100%" height="100%"><circle cx="40" cy="40" r="38" fill="#34d399"/><circle cx="28" cy="32" r="5" fill="#0f172a"/><circle cx="52" cy="32" r="5" fill="#0f172a"/><path d="M28 48 Q40 60 52 48" stroke="#0f172a" stroke-width="5" fill="none" stroke-linecap="round"/></svg>'
-            },
-            {
-                max: 100, color: "#fbbf24", text: "ปานกลาง",
-                outdoor: "ทำได้ปกติ", mask: "กลุ่มเสี่ยงควรมี", window: "เปิดได้พอควร",
-                face: '<svg viewBox="0 0 80 80" width="100%" height="100%"><circle cx="40" cy="40" r="38" fill="#fbbf24"/><circle cx="28" cy="32" r="5" fill="#0f172a"/><circle cx="52" cy="32" r="5" fill="#0f172a"/><line x1="30" y1="52" x2="50" y2="52" stroke="#0f172a" stroke-width="5" stroke-linecap="round"/></svg>'
-            },
-            {
-                max: 150, color: "#f97316", text: "เริ่มมีผลกระทบ",
-                outdoor: "ควรลดเวลา", mask: "ควรสวมหน้ากาก", window: "ควรปิดหน้าต่าง",
-                face: '<svg viewBox="0 0 80 80" width="100%" height="100%"><circle cx="40" cy="40" r="38" fill="#f97316"/><circle cx="28" cy="34" r="5" fill="#fff"/><circle cx="52" cy="34" r="5" fill="#fff"/><path d="M28 54 Q40 44 52 54" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/></svg>'
-            },
-            {
-                max: 200, color: "#ef4444", text: "มีผลต่อสุขภาพ",
-                outdoor: "งดกิจกรรมกลางแจ้ง", mask: "ต้องใส่ N95", window: "ปิดมิดชิด",
-                face: '<svg viewBox="0 0 80 80" width="100%" height="100%"><circle cx="40" cy="40" r="38" fill="#ef4444"/><path d="M22 30 L34 38 M34 30 L22 38" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="M46 30 L58 38 M58 30 L46 38" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="M26 56 Q40 46 54 56" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/></svg>'
-            },
-            {
-                max: 500, color: "#8b5cf6", text: "อันตรายมาก",
-                outdoor: "ห้ามออกนอกอาคาร", mask: "ต้องใส่ N95", window: "เปิดเครื่องฟอก",
-                face: '<svg viewBox="0 0 80 80" width="100%" height="100%"><circle cx="40" cy="40" r="38" fill="#8b5cf6"/><circle cx="28" cy="34" r="6" fill="#fff"/><circle cx="52" cy="34" r="6" fill="#fff"/><rect x="24" y="48" width="32" height="12" rx="4" fill="#fff"/></svg>'
-            }
-        ];
-
-        function getTier(val) {
-            if (isNaN(val) || val === null) return TIERS[0];
-            for (var i = 0; i < TIERS.length; i++) {
-                if (val <= TIERS[i].max) return TIERS[i];
-            }
-            return TIERS[TIERS.length - 1];
+        function getThermometerIcon(color) {
+            return '<svg viewBox="0 0 100 100" style="width:100%; height:100%; overflow:visible;">' +
+                '<path d="M50 20 A10 10 0 0 1 60 30 V70 A20 20 0 1 1 40 70 V30 A10 10 0 0 1 50 20 Z" fill="none" stroke="' + color + '" stroke-width="6"/>' +
+                '<circle cx="50" cy="80" r="8" fill="' + color + '"/>' +
+                '<rect x="47" y="40" width="6" height="35" rx="3" fill="' + color + '"/>' +
+                '</svg>';
         }
 
-
-        function render(data) {
-            if (!data) return;
-            var aqi = Number(data.aqi);
-            var tier = getTier(aqi);
-            document.documentElement.style.setProperty('--theme-color', tier.color);
-
-            document.getElementById('val-aqi').innerText = isNaN(aqi) ? '--' : aqi;
-            var aqiTwoDigits = String(isNaN(aqi) ? '--' : aqi).length <= 2;
-            document.querySelector('.hero-center').style.setProperty('--aqi-w', aqiTwoDigits ? '62cqw' : '44cqw');
-            document.getElementById('hero-status-pill').innerText = tier.text;
-            document.getElementById('hero-mascot').innerHTML = tier.face;
-
-            var temp = Number(data.temp);
-            document.getElementById('val-temp').innerText = isNaN(temp) ? '--' : temp.toFixed(1);
-            document.getElementById('hint-temp').innerText = isNaN(temp) ? '--' : (temp < 22 ? 'เย็นสบาย' : (temp > 33 ? 'ค่อนข้างร้อน' : 'สบายกำลังดี'));
-
-            if (data.timestamp) {
-                var tm = /^(\d\d)\/(\d\d)\/(\d{4}) (\d\d:\d\d)/.exec(data.timestamp);
-                document.getElementById('txt-updated').innerText = tm
-                    ? 'อัปเดตล่าสุด ' + tm[1] + '/' + tm[2] + '/' + tm[3] + ' ' + tm[4] + ' น.'
-                    : 'อัปเดตล่าสุด ' + data.timestamp;
-            }
+        function getAqiIcon(color, type) {
+            var mouth = (type === 'happy') ? "M30 70 Q50 85 70 70" : "M30 80 Q50 65 70 80";
+            return '<svg viewBox="0 0 100 100" style="width:100%; height:100%;"><circle cx="50" cy="50" r="48" fill="' + color + '" /><circle cx="33" cy="40" r="6" fill="white" /><circle cx="67" cy="40" r="6" fill="white" /><path d="' + mouth + '" stroke="white" stroke-width="6" fill="none" stroke-linecap="round" /></svg>';
         }
 
-        // ---------- สลับธีม สว่าง / มืด ----------
-        function applyThemeUI() {
-            var light = document.documentElement.getAttribute('data-theme') === 'light';
-            var icon = document.getElementById('theme-icon');
-            var label = document.getElementById('theme-label');
-            if (icon) icon.className = light ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
-            if (label) label.innerText = light ? 'มืด' : 'สว่าง';
+        // timestamp จาก API รูปแบบ "dd/mm/yyyy HH:MM:SS" (เวลาไทย) -> "อัปเดตล่าสุด dd/mm/yyyy HH:MM น."
+        function showUpdateTime(ts) {
+            var m = /^(\d\d)\/(\d\d)\/(\d{4}) (\d\d:\d\d)/.exec(ts || '');
+            if (!m) return;
+            document.getElementById('current-time').innerText =
+                'อัปเดตล่าสุด ' + m[1] + '/' + m[2] + '/' + m[3] + ' ' + m[4] + ' น.';
         }
-        function toggleTheme() {
-            var next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', next);
-            try { localStorage.setItem('scmc-theme', next); } catch (e) {}
-            applyThemeUI();
-        }
-        applyThemeUI();
 
         function readCache() {
             try {
@@ -1266,9 +354,10 @@
             try { localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), d: d })); } catch (e) { }
         }
 
-        function fetchAirData(i) {
+        // done(ok) ถูกเรียกเมื่อดึงสำเร็จ หรือลองครบทุก URL แล้วไม่สำเร็จ
+        function fetchAirData(i, done) {
             i = i || 0;
-            if (i >= DATA_SOURCES.length) return;
+            if (i >= DATA_SOURCES.length) { if (done) done(false); return; }
             var xhr = new XMLHttpRequest();
             xhr.open('GET', DATA_SOURCES[i].url, true);
             xhr.timeout = 10000;
@@ -1277,30 +366,134 @@
                 try {
                     if (xhr.status !== 200) throw new Error('HTTP ' + xhr.status);
                     var r = DATA_SOURCES[i].parse(xhr.responseText);
-                    if (r.status !== 'success') throw new Error('API status: ' + r.status);
-                    render(r.data);
-                    writeCache(r.data);
-                } catch (err) {
-                    fetchAirData(i + 1);
+                    if (r.status !== 'success') throw new Error('API status ' + r.status);
+                    renderUI(Number(r.data.aqi), Number(r.data.temp), r.data.timestamp);
+                    writeCache({ aqi: r.data.aqi, temp: r.data.temp, timestamp: r.data.timestamp });
+                    if (done) done(true);
+                } catch (e) {
+                    console.error(DATA_SOURCES[i].url, e);
+                    fetchAirData(i + 1, done);
                 }
             };
             xhr.send();
         }
 
-        function manualRefresh() {
-            fetchAirData(0);
+        // สีของอุณหภูมิ (°C) แยกจากสีของ AQI
+        function getTempColor(t) {
+            if (isNaN(t)) return "#95a5a6";
+            if (t < 20) return "#2D8CFF";   // เย็น
+            if (t < 28) return "#00B050";   // สบาย
+            if (t < 33) return "#F29900";   // อุ่น/ร้อน
+            if (t < 38) return "#FF5A00";   // ร้อนมาก
+            return "#E00000";               // ร้อนจัด
         }
 
-        function init() {
-            var cached = readCache();
-            if (cached && (Date.now() - cached.t) < CACHE_TTL) {
-                render(cached.d);
+        // ชุดสี AQI 6 ระดับ สำหรับจอ Signage (max = ขอบบนของระดับ, ใช้เป็นตัวเลขบนแถบสเกลด้วย)
+        var AQI_LEVELS = [
+            { max: 50, color: "#20C982", text: "อากาศดี", type: 'happy', textOnColor: "white" },
+            { max: 100, color: "#F5C842", text: "อากาศปานกลาง", type: 'happy', textOnColor: "black" },
+            { max: 150, color: "#F08B3E", text: "เริ่มมีผลต่อกลุ่มเสี่ยง", type: 'sad', textOnColor: "white" },
+            { max: 200, color: "#EE4D5A", text: "มีผลต่อสุขภาพ", type: 'sad', textOnColor: "white" },
+            { max: 300, color: "#9561D1", text: "มีผลต่อสุขภาพอย่างมาก", type: 'sad', textOnColor: "white" },
+            { max: 500, color: "#8F3D58", text: "อันตราย", type: 'sad', textOnColor: "white" }
+        ];
+
+        function getAqiLevelIndex(aqi) {
+            for (var i = 0; i < AQI_LEVELS.length - 1; i++) {
+                if (aqi <= AQI_LEVELS[i].max) return i;
             }
-            fetchAirData(0);
-            setInterval(function () { fetchAirData(0); }, 5 * 60 * 1000);
-            setInterval(function () { location.replace(location.pathname + '?t=' + Date.now()); }, 3600000);
+            return AQI_LEVELS.length - 1;
         }
-        init();
+
+        // แถบสเกลทุกช่วงกว้างเท่ากัน ตำแหน่งตัวชี้คิดแบบเส้นตรงภายในแต่ละช่วง
+        function buildAqiScale() {
+            var scale = document.getElementById('aqi-scale');
+            var n = AQI_LEVELS.length;
+            var html = '<div class="scale-bar">';
+            for (var i = 0; i < n; i++) {
+                html += '<div class="scale-seg" style="background:' + AQI_LEVELS[i].color + '"></div>';
+            }
+            html += '</div>';
+            for (var j = 0; j <= n; j++) {
+                var label = (j === 0) ? 0 : AQI_LEVELS[j - 1].max;
+                var align = (j === 0) ? 'transform:none;' : (j === n) ? 'transform:translateX(-100%);' : '';
+                html += '<div class="scale-tick" style="left:' + (j / n * 100) + '%;' + align + '">' + label + '</div>';
+            }
+            html += '<div class="scale-marker" id="scale-marker"></div>';
+            scale.innerHTML = html;
+        }
+
+        function updateAqiMarker(aqi) {
+            var i = getAqiLevelIndex(aqi);
+            var lo = i === 0 ? 0 : AQI_LEVELS[i - 1].max;
+            var frac = Math.min(Math.max((aqi - lo) / (AQI_LEVELS[i].max - lo), 0), 1);
+            document.getElementById('scale-marker').style.left = ((i + frac) / AQI_LEVELS.length * 100) + '%';
+        }
+
+        function renderUI(aqi, temp, ts) {
+            if (isNaN(aqi)) return;
+            showUpdateTime(ts);
+            var level = AQI_LEVELS[getAqiLevelIndex(aqi)];
+            var color = level.color, text = level.text, type = level.type, textOnColor = level.textOnColor;
+            updateAqiMarker(aqi);
+
+            // อัปเดต UI
+            const aqiVal = document.getElementById('aqi-value');
+            const tempVal = document.getElementById('temp-value');
+            const statusTxt = document.getElementById('status-text-large');
+            const labelTxt = document.querySelector('.aqi-label');
+
+            aqiVal.innerText = aqi;
+            // สำหรับสีเหลืองปรับสีตัวหนังสือให้เข้มเพื่อ Contrast
+            aqiVal.style.color = (color === "#F5C842") ? "#B8860B" : color;
+            tempVal.innerText = isNaN(temp) ? "--°C" : temp.toFixed(1) + "°C";
+            var tempColor = getTempColor(temp);
+            tempVal.style.color = tempColor;
+
+            document.getElementById('bottom-bar').style.background = color;
+
+            statusTxt.innerText = text;
+            statusTxt.style.color = textOnColor;
+
+            document.getElementById('status-icon').innerHTML = getAqiIcon(color, type);
+            document.getElementById('weather-icon-box').innerHTML = getThermometerIcon(tempColor);
+            if (labelTxt) labelTxt.style.color = (color === "#F5C842") ? "#B8860B" : color;
+        }
+
+        // "dd/mm/yyyy HH:MM:SS" (เวลาไทย) -> epoch ms
+        function tsToEpoch(ts) {
+            var m = /^(\d\d)\/(\d\d)\/(\d{4}) (\d\d):(\d\d):(\d\d)/.exec(ts || '');
+            return m ? Date.UTC(+m[3], +m[2] - 1, +m[1], +m[4] - 7, +m[5], +m[6]) : NaN;
+        }
+
+        // ข้อมูลออกทุกต้นชั่วโมง: นัดเช็คที่ hh:05:00 แล้วถ้าข้อมูลยังเป็นของชั่วโมงก่อนให้เช็คทุก 20 วินาทีจนกว่าจะมาใหม่
+        function nextDelay(ts) {
+            var now = Date.now();
+            var hourStart = Math.floor((now + TZ_MS) / HOUR_MS) * HOUR_MS - TZ_MS;
+            var since = now - hourStart;
+            if (since < FAST_WINDOW_MS && tsToEpoch(ts) < hourStart) return Math.max(WAIT_MS, START_MS - since);
+            return Math.min(CACHE_TTL, hourStart + HOUR_MS + START_MS - now);
+        }
+
+        // แคชใน localStorage: ถ้ายังสดใช้ค่าในแคชเลย ไม่ยิง API แล้วนัดเช็คใหม่ตอนแคชหมดอายุ
+        function refresh() {
+            var c = readCache(), age = c ? Date.now() - c.t : Infinity;
+            var wait = c ? nextDelay(c.d.timestamp) : 0;
+            if (age >= 0 && age < wait) {
+                renderUI(Number(c.d.aqi), Number(c.d.temp), c.d.timestamp);
+                setTimeout(refresh, wait - age + 1000);
+            } else {
+                fetchAirData(0, function (ok) {
+                    var fresh = ok && readCache();
+                    setTimeout(refresh, fresh ? nextDelay(fresh.d.timestamp) : RETRY_MS);
+                });
+            }
+        }
+
+        buildAqiScale();
+        refresh();
+        // โหลดหน้าใหม่ทุกชั่วโมงเพื่อรับโค้ดเวอร์ชันล่าสุด (?t= กันแคช)
+        setInterval(function () { location.replace(location.pathname + '?t=' + Date.now()); }, 3600000);
     </script>
 </body>
 
