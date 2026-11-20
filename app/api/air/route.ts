@@ -1,11 +1,9 @@
-import { createAirService } from '@/lib/air-server';
+import { getAirService } from '@/lib/air-service';
 
 export const dynamic = 'force-dynamic';
 
-const service = createAirService();
-
 export async function GET() {
-  const result = await service.get();
+  const result = await getAirService().get();
   if (!result) {
     return Response.json(
       { status: 'error' },

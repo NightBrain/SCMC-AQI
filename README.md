@@ -25,6 +25,7 @@ docker compose up -d --build
 | `HOST_PORT` | `6500` | port ฝั่ง host (ใน container ใช้ 3000) |
 | `MEM_LIMIT` | `192m` | RAM สูงสุด (ไม่ใช้ swap) |
 | `CPU_LIMIT` | `0.25` | CPU สูงสุด (core) |
+| `SITE_URL` | (ว่าง) | URL สาธารณะ เช่น `https://air.example.com` ใช้ทำ canonical / sitemap / Open Graph — **ควรตั้งตอน deploy จริง** |
 
 ตัวอย่าง: `HOST_PORT=8080 docker compose up -d` — อย่าใช้ port ที่เบราว์เซอร์บล็อก (เช่น 101, 6000, 6665–6669) และ
 ตัวแปรให้ตั้งทุกครั้งที่รัน หรือใส่ในไฟล์ `.env` ข้างๆ `docker-compose.yml`
@@ -35,6 +36,13 @@ docker compose up -d --build
 HTTPS / โดเมน: ไม่ได้รวมมาให้ ใช้ reverse proxy ของ server (เช่น Caddy, nginx) ชี้มาที่ port ข้างต้น
 
 > เว็บนี้เคยอยู่บน GitHub Pages ซึ่งรัน Next.js ไม่ได้ จอ signage ที่ชี้ URL เดิมต้องเปลี่ยนไปชี้ URL ของ server ใหม่
+
+## SEO
+
+แต่ละหน้ามี title, meta description (ใส่ค่า AQI/อุณหภูมิล่าสุดให้อัตโนมัติ ถ้า CMU ไม่ตอบใน 1.5 วินาทีใช้ข้อความคงที่),
+canonical, Open Graph, Twitter card, JSON-LD (schema.org) และ `<h1>` หนึ่งตัว รวมทั้ง `/robots.txt` (ห้าม `/api/`) กับ `/sitemap.xml`
+URL ในแท็กเหล่านี้มาจาก `SITE_URL` ถ้าไม่ตั้งจะเดาจาก host ของ request — ตั้ง `SITE_URL` เมื่อขึ้นโดเมนจริง
+ยังไม่มีรูปสำหรับ Open Graph (`og:image`) ลิงก์ที่แชร์จึงขึ้นเป็นข้อความล้วน
 
 ## โครงสร้างหน้าเว็บ (ทำไมไม่ใช้ React ในหน้า)
 

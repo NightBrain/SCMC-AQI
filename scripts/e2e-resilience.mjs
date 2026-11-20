@@ -96,6 +96,37 @@ for (const p of PAGES) {
     check(!/s-maxage=\d{5,}/.test(cc) && /no-store|no-cache|max-age=0/.test(cc), `${p.name}: HTML cache-control is not long-lived (got "${cc}")`);
   }
 }
+// 5) SEO: ข้อมูลที่ crawler อ่านได้จาก HTML ตรงๆ (ไม่ต้องรัน JS)
+{
+  const meta = (html, attr, key) => {
+    const m = new RegExp(`<meta[^>]*${attr}="${key}"[^>]*>`, 'i').exec(html);
+    const c = m && /content="([^"]*)"/i.exec(m[0]);
+    return c ? c[1] : null;
+  };
+  for (const p of PAGES) {
+    const html = await (await fetch(base + p.url)).text();
+    const site = process.env.SITE_URL ? process.env.SITE_URL.replace(/\/+$/, '') : base; // ตั้ง SITE_URL ให้ตรงกับ container ที่ทดสอบ
+    const want = site + (p.url === '/' ? '' : p.url);
+    check(/<title>[^<]{5,}<\/title>/.test(html), `${p.name} seo: <title>`);
+    const desc = meta(html, 'name', 'description');
+    check(!!desc && desc.includes('ACAIR CMU') && desc.length >= 40, `${p.name} seo: meta description ("${(desc || '').slice(0, 60)}...")`);
+    const canon = /<link[^>]*rel="canonical"[^>]*href="([^"]*)"/i.exec(html);
+    check(!!canon && canon[1] === want, `${p.name} seo: canonical = ${want} (got ${canon && canon[1]})`);
+    check(meta(html, 'property', 'og:title') && meta(html, 'property', 'og:description') && meta(html, 'property', 'og:url') === want && meta(html, 'property', 'og:locale') === 'th_TH', `${p.name} seo: open graph`);
+    check(meta(html, 'name', 'twitter:card') !== null, `${p.name} seo: twitter card`);
+    check(!/noindex/i.test(meta(html, 'name', 'robots') || ''), `${p.name} seo: indexable`);
+    check((html.match(/<h1[\s>]/g) || []).length === 1, `${p.name} seo: exactly one <h1> (got ${(html.match(/<h1[\s>]/g) || []).length})`);
+    const ld = /<script type="application\/ld\+json">([^<]*)<\/script>/.exec(html);
+    let ldOk = false;
+    try { ldOk = !!ld && !!JSON.parse(ld[1])['@type']; } catch { /* invalid */ }
+    check(ldOk, `${p.name} seo: JSON-LD parses`);
+  }
+  const siteBase = process.env.SITE_URL ? process.env.SITE_URL.replace(/\/+$/, '') : base;
+  const robots = await (await fetch(base + '/robots.txt')).text();
+  check(/Allow: \//.test(robots) && /Disallow: \/api\//.test(robots) && robots.includes(`Sitemap: ${siteBase}/sitemap.xml`), 'robots.txt: allow, disallow /api/, sitemap');
+  const sm = await (await fetch(base + '/sitemap.xml')).text();
+  check(sm.includes(`<loc>${siteBase}</loc>`) && sm.includes(`<loc>${siteBase}/detail</loc>`), 'sitemap.xml lists / and /detail');
+}
 await browser.close();
 console.log(failures ? `FAILED (${failures})` : 'ALL PASSED');
 process.exit(failures ? 1 : 0);

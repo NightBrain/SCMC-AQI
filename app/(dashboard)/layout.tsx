@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next';
 import { Prompt } from 'next/font/google';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import JsonLd from '@/components/JsonLd';
+import { buildPageMetadata } from '@/lib/metadata';
 import './detail/detail.css';
 
 const prompt = Prompt({
@@ -10,10 +12,9 @@ const prompt = Prompt({
   variable: '--font-prompt',
 });
 
-export const metadata: Metadata = {
-  title: 'SCMC Air Quality',
-  icons: { icon: '/favicon.png' },
-};
+export function generateMetadata(): Promise<Metadata> {
+  return buildPageMetadata('/detail', 'รายละเอียดคุณภาพอากาศ PM2.5 AQI อุณหภูมิ | SCMC Air Quality');
+}
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -34,7 +35,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
       </head>
-      <body>{children}</body>
+      <body>
+        <JsonLd path="/detail" type="WebPage" name="รายละเอียดคุณภาพอากาศ SCMC Air Quality" />
+        {children}
+      </body>
     </html>
   );
 }

@@ -35,6 +35,7 @@
         }
 
         .header-text {
+            margin: 0; /* เป็น <h1> เพื่อ SEO: ล้าง margin ตั้งต้นของเบราว์เซอร์ให้หน้าตาเหมือนเดิม */
             position: absolute;
             width: 100%;
             top: 3vh;

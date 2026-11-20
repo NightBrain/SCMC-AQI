@@ -109,6 +109,8 @@ async function shoot(browser, url, c, vp) {
   }, c.ready);
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(1500);
+  // ป้าย AQI ที่หัว /detail ถูกปรับสีให้สว่างขึ้นโดยตั้งใจ (ต่างจากต้นฉบับ) จึงซ่อนทั้งสองฝั่งตอนเทียบ
+  await page.addStyleTag({ content: '.brand-badge { visibility: hidden !important; }' });
   const buf = await page.screenshot({ animations: 'disabled', caret: 'hide' });
   await ctx.close();
   return PNG.sync.read(buf);

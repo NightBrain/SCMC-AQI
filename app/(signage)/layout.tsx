@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { Prompt } from 'next/font/google';
+import JsonLd from '@/components/JsonLd';
+import { buildPageMetadata } from '@/lib/metadata';
 import './signage.css';
 
 const prompt = Prompt({
@@ -9,15 +11,17 @@ const prompt = Prompt({
   variable: '--font-prompt',
 });
 
-export const metadata: Metadata = {
-  title: 'SCMC - Air Quality',
-  icons: { icon: '/favicon.png' },
-};
+export function generateMetadata(): Promise<Metadata> {
+  return buildPageMetadata('/', 'คุณภาพอากาศวันนี้ (AQI) | SCMC Air Quality');
+}
 
 export default function SignageLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="th" className={prompt.variable} suppressHydrationWarning>
-      <body>{children}</body>
+      <body>
+        <JsonLd path="/" type="WebSite" name="SCMC Air Quality" />
+        {children}
+      </body>
     </html>
   );
 }
