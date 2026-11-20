@@ -34,8 +34,8 @@ const VIEWPORTS = [
 ];
 const CASES = [
   { name: 'signage', legacy: '/', next: '/', ready: '#aqi-value', theme: null },
-  { name: 'v2-dark', legacy: '/v2/', next: '/v2', ready: '#val-aqi', theme: 'dark' },
-  { name: 'v2-light', legacy: '/v2/', next: '/v2', ready: '#val-aqi', theme: 'light' },
+  { name: 'detail-dark', legacy: '/v2/', next: '/detail', ready: '#val-aqi', theme: 'dark' },
+  { name: 'detail-light', legacy: '/v2/', next: '/detail', ready: '#val-aqi', theme: 'light' },
 ];
 
 const children = [];

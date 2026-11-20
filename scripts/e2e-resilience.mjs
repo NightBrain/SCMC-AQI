@@ -32,7 +32,7 @@ for (let i = 0; i < 100; i++) {
 
 const PAGES = [
   { name: 'signage', url: '/', probe: '#aqi-value', expect: '22' },
-  { name: 'v2', url: '/v2', probe: '#val-aqi', expect: '22' },
+  { name: 'detail', url: '/detail', probe: '#val-aqi', expect: '22' },
 ];
 const browser = await chromium.launch();
 let failures = 0;

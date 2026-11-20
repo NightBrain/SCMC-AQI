@@ -127,7 +127,9 @@
 
         .brand-badge {
             background: var(--theme-color);
-            color: #000;
+            /* ผสมขาวให้ป้ายสว่างกว่าแสงพื้นหลัง (เบราว์เซอร์ที่ไม่รองรับ color-mix ใช้บรรทัดบน) */
+            background: color-mix(in srgb, var(--theme-color) 68%, #fff);
+            color: #04210f;
             font-weight: 800;
             font-size: calc((1.1rem) / var(--tz, 1));
             padding: 0.2rem 0.6rem;

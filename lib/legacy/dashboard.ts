@@ -1,4 +1,4 @@
-// ตรรกะหน้า /v2 เดิม (v2/index.html) ที่แก้ DOM ตรงๆ — ย้ายมาเกือบตรงตัว
+// ตรรกะหน้า /detail เดิม (v2/index.html) ที่แก้ DOM ตรงๆ — ย้ายมาเกือบตรงตัว
 // startDashboard() เรียกครั้งเดียวหลัง mount และคืนฟังก์ชัน cleanup
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { fetchAir } from '../air-client';

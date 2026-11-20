@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Prompt } from 'next/font/google';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import './v2/v2.css';
+import './detail/detail.css';
 
 const prompt = Prompt({
   weight: ['400', '500', '600', '700', '800', '900'],
@@ -11,7 +11,7 @@ const prompt = Prompt({
 });
 
 export const metadata: Metadata = {
-  title: 'SCMC Air Quality v2',
+  title: 'SCMC Air Quality',
   icons: { icon: '/favicon.png' },
 };
 
