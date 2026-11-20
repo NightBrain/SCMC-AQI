@@ -1,0 +1,16 @@
+node_modules
+.next
+.git
+.gitignore
+.superpowers
+.DS_Store
+.env
+.env.*
+docs
+scripts/*
+!scripts/build-legacy.mjs
+public/js
+*.md
+Dockerfile
+docker-compose.yml
+.dockerignore

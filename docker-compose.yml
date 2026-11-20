@@ -1,0 +1,44 @@
+services:
+  app:
+    build: .
+    image: scmc-aqi:latest
+    container_name: scmc-aqi
+    restart: unless-stopped
+    ports:
+      - "${HOST_PORT:-6500}:3000"
+    environment:
+      TZ: Asia/Bangkok
+      # ให้ Node เก็บ memory เองก่อนจะชนเพดาน RAM ของ container (ไม่ให้ถูก OOM-kill)
+      NODE_OPTIONS: --max-old-space-size=96
+
+    # ---- ลิมิตทรัพยากร ----
+    # งบรวมของ server: 2 core / 2 GB สำหรับ ~40 container (เฉลี่ย ~51 MB, ~0.05 core ต่อตัว)
+    # ค่าด้านล่างเป็นเพดาน ไม่ใช่ค่าที่ใช้จริง; ปรับผ่าน MEM_LIMIT / CPU_LIMIT ได้
+    mem_limit: ${MEM_LIMIT:-192m}
+    memswap_limit: ${MEM_LIMIT:-192m} # เท่ากับ mem_limit = ห้ามใช้ swap
+    mem_reservation: 96m
+    cpus: ${CPU_LIMIT:-0.25}
+    cpu_shares: 256 # ค่าปกติ 1024: CPU ตึงเมื่อไหร่ ยอมให้ container อื่นก่อน
+    pids_limit: 100
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    # ---- ความปลอดภัย ----
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
+    # ยิงหน้า / (ไม่ใช่ /api/air) เพราะ CMU ล่มแล้ว /api/air ตอบ 502 ทั้งที่แอปปกติ
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "/dev/null", "http://127.0.0.1:3000/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
